@@ -9,9 +9,16 @@
             return \App\Model\Question::class;
         }
 
-        public function getAllQuestionByUserId($userId,$topic_class_id,$is_public)
+        public function getAllQuestionByUserId($userId)
         {
-            return  $this->where([['user_id',$userId],['topic_class_id',$topic_class_id],['is_public',$is_public]]);
+            $column = ['questions.id as question_id','level_id','level_name','topic_id','topic_name','class_id','class_name','user_id','is_multichoise','number_answer','content','questions.created_at','questions.updated_at'];
+           return $this->_model->join('topic_class','questions.topic_class_id','=','topic_class.id')
+                                ->join('topic','topic.id','=','topic_class.topic_id')
+                                ->join('classes','classes.id','=','topic_class.class_id')
+                                ->join('levels','levels.id','=','questions.level_id')
+                                ->where('user_id',$userId)
+                                ->select($column)
+                                ->get();
         }
 
         public function getQuestionByTopic($topicId) {
@@ -47,12 +54,28 @@
                                 ->get();
         }
 
-        public function getQuestionIsPublicById($userID){
-            return $this->where([['user_id',$userID],['is_public',1]]);
+        public function getQuestionIsPublicById($userId){
+           $column = ['questions.id as question_id','level_id','level_name','topic_id','topic_name','class_id','class_name','user_id','is_multichoise','number_answer','content','questions.created_at','questions.updated_at'];
+           return $this->_model->join('topic_class','questions.topic_class_id','=','topic_class.id')
+                                ->join('topic','topic.id','=','topic_class.topic_id')
+                                ->join('classes','classes.id','=','topic_class.class_id')
+                                ->join('levels','levels.id','=','questions.level_id')
+                                ->where('user_id',$userId)
+                                ->where('is_public',1)
+                                ->select($column)
+                                ->get();
         }
 
-        public function getQuestionNonPublicById($userID){
-            return $this->where([['user_id',$userID],['is_public',0]]);
+        public function getQuestionNonPublicById($userId){
+             $column = ['questions.id as question_id','level_id','level_name','topic_id','topic_name','class_id','class_name','user_id','is_multichoise','number_answer','content','questions.created_at','questions.updated_at'];
+           return $this->_model->join('topic_class','questions.topic_class_id','=','topic_class.id')
+                                ->join('topic','topic.id','=','topic_class.topic_id')
+                                ->join('classes','classes.id','=','topic_class.class_id')
+                                ->join('levels','levels.id','=','questions.level_id')
+                                ->where('user_id',$userId)
+                                ->where('is_public',0)
+                                ->select($column)
+                                ->get();
         }
         
         public function getQuestionByQuestionId($question_id){

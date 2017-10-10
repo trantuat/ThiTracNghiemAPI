@@ -5,7 +5,7 @@
         * Get all posts only published
         * @return mixed
         */   
-        public function getAllQuestionByUserId($userId,$topic_class_id,$is_public);
+        public function getAllQuestionByUserId($userId);
 
         public function getQuestionByTopic($topicId);
 
@@ -21,9 +21,9 @@
 
         public function getQuestionNonPublic();
 
-        public function getQuestionIsPublicById($userID);
+        public function getQuestionIsPublicById($userId);
 
-        public function getQuestionNonPublicById($userID);
+        public function getQuestionNonPublicById($userId);
 
         public function getQuestionByQuestionId($question_id);
     }

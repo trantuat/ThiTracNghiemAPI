@@ -27,19 +27,11 @@ class QuestionController extends Controller
 
     public function getAllQuestionByUserId(Request $request) 
     {
-        $userId = $this->getUserId($request);       
+        $userId = $this->getUserId($request);
         if ($userId == -1){
             return  $this->Unauthentication();
         }
-        $level_id = $request->header('level_id');
-        $topic_id = $request->header('topic_id');
-        $class_id = $request->header('class_id');
-        $is_public = $request->header('is_public'); 
-        $topic_class_id = TopicClass::where('topic_id',$topic_id)->where('class_id',$class_id)->first()['id'];
-        if ($topic_class_id==null){
-            return $this->BadRequest('topic_class_id Not Found');
-        }
-        $question = $this->questionRepository->getAllQuestionByUserId($userId,$topic_class_id,$is_public);
+        $question = $this->questionRepository->getAllQuestionByUserId($userId);
         return $this->OK($question);
     }
 

@@ -136,7 +136,6 @@ class UserController extends Controller
                                                                 'role_user_id'=>$role, 
                                                                 'email'=>$email, 
                                                                 'is_active'=>1,
-                                                                'api_token'=>str_random(60),
                                                                 'created_at'=>date("Y-m-d H:m:s"),
                                                                 'updated_at'=>date("Y-m-d H:m:s")]);
                 $this->infoRepository->insert(['address'=>$address,
