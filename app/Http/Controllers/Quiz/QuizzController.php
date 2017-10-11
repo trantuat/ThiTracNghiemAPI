@@ -196,7 +196,8 @@ class QuizzController extends Controller
         $history_id = $this->historyRepository->insertGetID([
             'user_id'=>$user_id,
             'quizz_id'=>$quizz_id,
-            'quizz_times'=>$quizzTimes
+            'quizz_times'=>$quizzTimes,
+            'created_at'=>date("Y-m-d H:m:s")
         ]);
         
         for( $i=0; $i < count($answer); $i++){
@@ -316,4 +317,45 @@ class QuizzController extends Controller
         $result['data'] = $data1;
         return $result ;
     }
+
+    public function getResultTest($historyId){
+        $answer = $this->getAnswerDetail($historyId);
+        $question =  json_decode($this->quizRepository->getAnswerDetail($historyId),true);
+        $json = array();
+        $json1 = array();
+        
+        foreach($answer as $value){
+             $json['question_id'] = $value[0];
+           try{                       
+             $json['answer'] =  $this->answerRepository->getAnswer($json['question_id']);     
+           }catch(\Exception $ex){              
+           }             
+             $data[]=$json;
+        }
+        foreach($question as $quest){
+             foreach($data as $dt){
+                if($dt['question_id'] == $quest['question_id']){                  
+                    $json1 = $dt;
+                    $json1['content'] = $quest['content'];
+                    $json1['img_link'] = $quest['img_link'];             
+                    $json1['is_multichoise'] = $quest['is_multichoise'];
+                    $json1['user_id'] = $quest['user_id'];
+                    $option_choose = $this->answerStudentRepository->getOptionChoose($dt['question_id'],$historyId);
+                    try{
+                        $json1['option_choose1'] = $option_choose[0]['option_choose'];
+                        $json1['option_choose2'] = $option_choose[1]['option_choose'];                
+                        $json1['option_choose3'] = $option_choose[2]['option_choose'];                
+                        $json1['option_choose4'] = $option_choose[3]['option_choose'];                
+                        $json1['option_choose5'] = $option_choose[4]['option_choose'];                                    
+                    }catch(\Exception $ex){
+                    }
+                    $data1[] = $json1;                      
+                 }             
+              }
+        }
+        $result = array();
+        $result['data'] = $data1;
+        return $result ;
+    }
+    
 }

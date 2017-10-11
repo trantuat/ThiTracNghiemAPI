@@ -21,6 +21,8 @@ Route::group(['prefix' => 'user'], function() {
     Route::post('/register', 'User\UserController@register');
     Route::put('/update', 'User\UserController@updateUser');
     Route::get('/question', 'Question\QuestionController@getAllQuestionByUserId');
+    Route::get('/getQuestionPublic','User\UserController@getQuestionPublic');
+    Route::get('/getQuestionNonPublic','User\UserController@getQuestionNonPublic'); 
 });
 
 Route::group(['prefix' => 'question'], function() {
@@ -49,7 +51,9 @@ Route::group(['prefix' => 'quizz'], function() {
     Route::get('/getHistoryDetail/quizzId={id}','Quiz\QuizzController@getHistoryDetail');
     Route::get('/getHistoryAnswer/historyId={id}','Quiz\QuizzController@getHistoryAnswer');
     Route::get('/test/{id}','Quiz\QuizzController@test');
-    Route::get('/getHistoryAnswerDetail/historyId={id}','Quiz\QuizzController@getHistoryAnswerDetail');   
+    Route::get('/getHistoryAnswerDetail/historyId={id}','Quiz\QuizzController@getHistoryAnswerDetail'); 
+    Route::get('/getResultTest/historyID={id}', 'Quiz\QuizzController@getResultTest');    
+  
 });
 
 Route::group(['prefix' => 'admin'],function(){

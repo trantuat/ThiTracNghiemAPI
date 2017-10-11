@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\User\InfoRepositoryInterface;
+use App\Repositories\Question\QuestionRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
 use App\Model\Token;
 
@@ -14,12 +15,15 @@ class UserController extends Controller
 {
     protected $userRepository;
     protected $infoRepository;
+    protected $questionRepository;
     
-    public function __construct(UserRepositoryInterface $userRepository, InfoRepositoryInterface $infoRepository)
+    public function __construct(UserRepositoryInterface $userRepository, InfoRepositoryInterface $infoRepository, QuestionRepositoryInterface $questionRepository)
     {
         $this->userRepository = $userRepository;
         $this->infoRepository = $infoRepository;
+        $this->questionRepository = $questionRepository;
     }
+    
 
     public function getUserById(Request $request) 
     {
@@ -178,5 +182,31 @@ class UserController extends Controller
         } catch (\Exception $ex) {
             return $this->BadRequest("Unvalid field");
         }
+    }
+
+    public function getQuestionPublic(Request $request){
+        try {
+            $userId = $this->getUserId($request);
+            if ($userId == -1){
+                return  $this->Unauthentication();
+            }
+            $questionIsPublic = $this->questionRepository->getQuestionIsPublicById($userId);
+            return $this->OK($questionIsPublic);
+        }catch(\Exception $e){
+            return $this->BadRequest("Question Not Found");
+        }    
+    }
+
+    public function getQuestionNonPublic(Request $request){
+        try {
+            $userId = $this->getUserId($request);
+            if ($userId == -1){
+                return  $this->Unauthentication();
+            }
+            $questionIsPublic = $this->questionRepository->getQuestionNonPublicById($userId);
+            return $this->OK($questionIsPublic);
+        }catch(\Exception $e){
+            return $this->BadRequest("Question Not Found");
+        }    
     }
 }

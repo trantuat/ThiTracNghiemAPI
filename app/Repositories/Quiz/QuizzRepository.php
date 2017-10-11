@@ -24,8 +24,8 @@
                                 ->join('questions','answer_student.question_id','=','questions.id')
                                 ->join('answers','answer_student.question_id','=','answers.question_id')
                                 //->select('answer_student.history_id','quizzes.id as quizz_id','answer_student.question_id','answer_student.option_choose')
-                                ->select('answer_student.question_id','questions.content','questions.img_link','questions.is_multichoise','answers.id')
-                                ->where('histories.id',$quizzId)
+                                ->select('answers.is_correct_answer','answer_student.history_id','answer_student.question_id','questions.content','answer_student.option_choose','questions.img_link','questions.is_multichoise','answers.id','histories.user_id')
+                                //->where('histories.id',$quizzId)
                                 ->groupBy('answer_student.question_id')                                
                                 ->get();
         }
