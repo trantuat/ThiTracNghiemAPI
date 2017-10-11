@@ -99,7 +99,7 @@ class QuizzController extends Controller
                                             'updated_at'=>date("Y-m-d H:m:s")
                                             ]);
              }
-             return startQuizz($request, $quiz_id);
+             return $this->OK(['quiz_id'=>$quiz_id]); 
         //  } catch (\Exception $e) {
         //     return $this->BadRequest($e);
         // }
