@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use App\Model\Token;
+use App\Model\User;
 
 class Controller extends BaseController
 {
@@ -24,6 +25,17 @@ class Controller extends BaseController
         return response()->json(['error'=>"Token invalidate"], 401);
     }
 
+    public function getRoleId($user_id) {
+        $user = User::where('id',$user_id)->first();
+        if ($user->role_user_id == 1) {
+            return RoleUser::STUDENT;
+        }
+        if ($user->role_user_id == 2) {
+            return RoleUser::TEACHER;
+        }
+        return RoleUser::ADMIN;
+    }
+
     public function getUserId(Request $request) {
         $token = $request->header('api_token');
         $api_token = Token::where('api_token',$token)->first();
@@ -32,4 +44,10 @@ class Controller extends BaseController
         }
         return  $api_token->user_id;
     }
+}
+
+interface RoleUser {
+    const STUDENT = 1;
+    const TEACHER = 2;
+    const ADMIN = 3;
 }

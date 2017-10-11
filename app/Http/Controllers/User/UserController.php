@@ -10,6 +10,8 @@ use App\Repositories\User\InfoRepositoryInterface;
 use App\Repositories\Question\QuestionRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
 use App\Model\Token;
+use App\Http\Controllers\RoleUser;
+
 
 class UserController extends Controller
 {
@@ -44,15 +46,24 @@ class UserController extends Controller
 
     public function getAll(Request $request) 
     {
-        try {
+        // try {
+            $userId = $this->getUserId($request);
+            if ($userId == -1){
+                return  $this->Unauthentication();
+            }
+            $role = $this->getRoleId($userId);
+            if ($role != RoleUser::ADMIN) {
+                 return $this->BadRequest("You're not permitted to use this api.");
+            }
             $user = $this->userRepository->getAll();
             if ($user == null) {
                 return $this->BadRequest("User not found");
             }
+            
             return $this->OK($user);
-       } catch (\Exception $ex) {
-           return $this->BadRequest($ex);
-       }
+       // } catch (\Exception $ex) {
+       //     return $this->BadRequest($ex);
+       // }
     }
 
     public function updateUser(Request $request)
@@ -190,6 +201,10 @@ class UserController extends Controller
             if ($userId == -1){
                 return  $this->Unauthentication();
             }
+            $role = $this->getRoleId($userId);
+            if ($role != RoleUser::TEACHER) {
+                 return $this->BadRequest("You're not permitted to use this api.");
+            }
             $questionIsPublic = $this->questionRepository->getQuestionIsPublicById($userId);
             return $this->OK($questionIsPublic);
         }catch(\Exception $e){
@@ -202,6 +217,10 @@ class UserController extends Controller
             $userId = $this->getUserId($request);
             if ($userId == -1){
                 return  $this->Unauthentication();
+            }
+            $role = $this->getRoleId($userId);
+            if ($role != RoleUser::TEACHER) {
+                 return $this->BadRequest("You're not permitted to use this api.");
             }
             $questionIsPublic = $this->questionRepository->getQuestionNonPublicById($userId);
             return $this->OK($questionIsPublic);

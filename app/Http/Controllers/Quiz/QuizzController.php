@@ -12,6 +12,7 @@ use App\Repositories\Quiz\QuizzRepositoryInterface;
 use App\Repositories\Quiz\QuizzQuestionRepositoryInterface;
 use App\Repositories\History\HistoryRepositoryInterface;
 use App\Model\TopicClass;
+use App\Http\Controllers\RoleUser;
 
 class QuizzController extends Controller
 {
@@ -42,6 +43,10 @@ class QuizzController extends Controller
 
     public function getAllQuiz(Request $request) {
         // try {
+            $user_id = $this->getUserId($request);
+            if ($user_id == -1){
+                return  $this->Unauthentication();
+            }
             
             $quiz = $this->quizRepository->getAllQuiz(); 
             return $this->OK($quiz);
@@ -68,6 +73,10 @@ class QuizzController extends Controller
             $user_id = $this->getUserId($request);
             if ($user_id == -1){
                 return  $this->Unauthentication();
+            }
+             $role = $this->getRoleId($user_id);
+            if ($role != RoleUser::STUDENT) {
+                 return $this->BadRequest("You're not permitted to use this api.");
             }
             $class_id = $request->class_id;
             $level_id = $request->level_id;
@@ -110,6 +119,10 @@ class QuizzController extends Controller
             if ($user_id == -1){
                 return  $this->Unauthentication();
             }
+             $role = $this->getRoleId($user_id);
+             if ($role != RoleUser::STUDENT) {
+                 return $this->BadRequest("You're not permitted to use this api.");
+            }
             $column = ['quizzes.id as quizz_id','questions.content','is_multichoise','number_answer','questions.img_link','quizz_questions.question_id as question_id','duration'];
             $quizzes = $this->quizRepository->getQuestionInQuizz($quizzId,$column);
             for ($i=0;$i<count($quizzes);$i++) {
@@ -122,14 +135,14 @@ class QuizzController extends Controller
     }
 
 
-    public function restartQuizz($quizzId) {
-        // try {
-            $quizz =  $this->quizRepository->getQuizzDetail($quizzId);
-            return $this->OK($quizz);
-        // } catch (\Exception $e) {
-        //     return $this->BadRequest($e);
-        // }
-    }
+    // public function restartQuizz($quizzId) {
+    //     // try {
+    //         $quizz =  $this->quizRepository->getQuizzDetail($quizzId);
+    //         return $this->OK($quizz);
+    //     // } catch (\Exception $e) {
+    //     //     return $this->BadRequest($e);
+    //     // }
+    // }
 
     public function getAnswer(Request $request,$quizzId) {
         try {
@@ -137,6 +150,10 @@ class QuizzController extends Controller
             if ($user_id == -1){
                 return  $this->Unauthentication();
                 
+            }
+            $role = $this->getRoleId($user_id);
+             if ($role == RoleUser::ADMIN) {
+                 return $this->BadRequest("You're not permitted to use this api.");
             }
             $column = ['quizzes.id as quizz_id','quizz_questions.question_id as question_id','duration'];
             $quizzes = $this->quizRepository->getQuestionInQuizz($quizzId,$column);
@@ -187,6 +204,10 @@ class QuizzController extends Controller
             return  $this->Unauthentication();
             
         }
+        $role = $this->getRoleId($user_id);
+        if ($role != RoleUser::STUDENT) {
+             return $this->BadRequest("You're not permitted to use this api.");
+        }
         $quizz_id = $json['quizz_id'];
         $answer = $json['answer'];
         $maxQuizzTimes = $this->historyRepository->getMaxQuizzTimes($quizz_id);
@@ -207,15 +228,29 @@ class QuizzController extends Controller
         return $this->OK("$history_id");
     }
 
-    public function getNumberQuestion($quizzid){
+    public function getNumberQuestion(Request $request, $quizzid){
+         $user_id = $this->getUserId($request);
+        if ($user_id == -1){
+            return  $this->Unauthentication();
+            
+        }
         return $this->quizQuestionRepository->getNumberQuestion($quizzid);
     }
 
-    public function getHistoryScore($quizzId){
+    public function getHistoryScore(Request $request, $quizzId){
+         $user_id = $this->getUserId($request);
+        if ($user_id == -1){
+            return  $this->Unauthentication();
+            
+        }
         return $this->quizRepository->getHistoryScore($quizzId);
     }
 
-    public function getQuizzScore($historyId){
+    public function getQuizzScore(Request $request, $historyId){
+        $user_id = $this->getUserId($request);
+        if ($user_id == -1){
+            return  $this->Unauthentication();
+        }
         return $this->quizRepository->getQuizzScore($historyId);
     }
 
@@ -243,7 +278,11 @@ class QuizzController extends Controller
         return $this->historyRepository->getHistoryAnswer($user_id,$history_id);
     }
 
-    public function getAnswerDetail($historyId){
+    public function getAnswerDetail(Request $request, $historyId){
+        $user_id = $this->getUserId($request);
+        if ($user_id == -1){
+            return  $this->Unauthentication();
+        }
         $answer = json_decode($this->quizRepository->getAnswerDetail($historyId),true);
         $json1 = array();        
         foreach($answer as $value){
@@ -263,7 +302,11 @@ class QuizzController extends Controller
         return $data;
     }
 
-    public function getHistoryAnswerDetail($historyId){
+    public function getHistoryAnswerDetail(Request $request, $historyId){
+        $user_id = $this->getUserId($request);
+        if ($user_id == -1){
+            return  $this->Unauthentication();
+        }
         $answer = $this->getAnswerDetail($historyId);
         $question =  json_decode($this->quizRepository->getAnswerDetail($historyId),true);
         $json = array();
@@ -318,7 +361,11 @@ class QuizzController extends Controller
         return $result ;
     }
 
-    public function getResultTest($historyId){
+    public function getResultTest(Request $request, $historyId){
+        $user_id = $this->getUserId($request);
+        if ($user_id == -1){
+            return  $this->Unauthentication();
+        }
         $answer = $this->getAnswerDetail($historyId);
         $question =  json_decode($this->quizRepository->getAnswerDetail($historyId),true);
         $json = array();
