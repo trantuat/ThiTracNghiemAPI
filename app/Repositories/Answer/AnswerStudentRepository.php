@@ -15,6 +15,18 @@
                                 ->get();
             
         }
+
+        public function countOptionChoose($questionID,$historyID){
+            return $this->_model->where([['history_id',$historyID],['question_id',$questionID]])
+                                ->count();
+        }
+
+        public function numberCorrectAnswer($questionID,$historyID){
+            return $this->_model->join("answers",'answer_student.option_choose','=','answers.id')
+                                ->where([['answer_student.history_id',$historyID],['answer_student.question_id',$questionID],['is_correct_answer',1]])
+                                ->select('answer_student.option_choose','answers.is_correct_answer','answer_student.question_id','answers.id as answer_id')
+                                ->count();
+        }
         
      }
 ?>

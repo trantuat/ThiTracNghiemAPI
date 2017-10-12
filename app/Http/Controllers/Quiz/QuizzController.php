@@ -307,7 +307,7 @@ class QuizzController extends Controller
         if ($user_id == -1){
             return  $this->Unauthentication();
         }
-        $answer = $this->getAnswerDetail($historyId);
+        $answer = $this->getAnswerDetail($request,$historyId);
         $question =  json_decode($this->quizRepository->getAnswerDetail($historyId),true);
         $json = array();
         $json1 = array();
@@ -366,7 +366,7 @@ class QuizzController extends Controller
         if ($user_id == -1){
             return  $this->Unauthentication();
         }
-        $answer = $this->getAnswerDetail($historyId);
+        $answer = $this->getAnswerDetail($request,$historyId);
         $question =  json_decode($this->quizRepository->getAnswerDetail($historyId),true);
         $json = array();
         $json1 = array();
@@ -381,21 +381,22 @@ class QuizzController extends Controller
         }
         foreach($question as $quest){
              foreach($data as $dt){
-                if($dt['question_id'] == $quest['question_id']){                  
+                if($dt['question_id'] == $quest['question_id']){
                     $json1 = $dt;
                     $json1['content'] = $quest['content'];
                     $json1['img_link'] = $quest['img_link'];             
                     $json1['is_multichoise'] = $quest['is_multichoise'];
                     $json1['user_id'] = $quest['user_id'];
+                    $coutOptionChoose = $this->answerStudentRepository->countOptionChoose($dt['question_id'],$historyId);
                     $option_choose = $this->answerStudentRepository->getOptionChoose($dt['question_id'],$historyId);
-                    try{
-                        $json1['option_choose1'] = $option_choose[0]['option_choose'];
-                        $json1['option_choose2'] = $option_choose[1]['option_choose'];                
-                        $json1['option_choose3'] = $option_choose[2]['option_choose'];                
-                        $json1['option_choose4'] = $option_choose[3]['option_choose'];                
-                        $json1['option_choose5'] = $option_choose[4]['option_choose'];                                    
-                    }catch(\Exception $ex){
+                    for ($i=0;$i<$coutOptionChoose;$i++){
+                        $string = "option_choose".($i+1);
+                        $jsonsanswer[$string] = $option_choose[$i]['option_choose'];
                     }
+                    $json1['option_choose'] = $jsonsanswer;
+                    unset($jsonsanswer);
+                    $json1['numberCorrectAnswer'] = $this->answerStudentRepository->numberCorrectAnswer($dt['question_id'],$historyId);                                     
+                    $json1['totalCorrectAnswer'] = $this->answerRepository->countCorrectAnswer($dt['question_id']);
                     $data1[] = $json1;                      
                  }             
               }
@@ -403,6 +404,10 @@ class QuizzController extends Controller
         $result = array();
         $result['data'] = $data1;
         return $result ;
+    }
+
+    public function test($question_id){
+        return $this->answerStudentRepository->getQuizzScore($question_id);
     }
     
 }

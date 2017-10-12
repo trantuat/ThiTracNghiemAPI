@@ -6,5 +6,7 @@
         * @return mixed
         */   
         public function getOptionChoose($questionID,$historyID);
+        public function countOptionChoose($questionID,$historyID);
+        public function numberCorrectAnswer($questionID,$historyID);
     }
 ?>

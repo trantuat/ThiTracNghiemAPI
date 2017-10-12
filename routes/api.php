@@ -50,7 +50,7 @@ Route::group(['prefix' => 'quizz'], function() {
     Route::get('/getHistory','Quiz\QuizzController@getHistory');
     Route::get('/getHistoryDetail/quizzId={id}','Quiz\QuizzController@getHistoryDetail');
     Route::get('/getHistoryAnswer/historyId={id}','Quiz\QuizzController@getHistoryAnswer');
-    Route::get('/test/{id}','Quiz\QuizzController@test');
+    Route::get('/test','Quiz\QuizzController@test');
     Route::get('/getHistoryAnswerDetail/historyId={id}','Quiz\QuizzController@getHistoryAnswerDetail'); 
     Route::get('/getResultTest/historyID={id}', 'Quiz\QuizzController@getResultTest');    
   

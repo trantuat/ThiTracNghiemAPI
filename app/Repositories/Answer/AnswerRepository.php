@@ -20,5 +20,9 @@
                                 ->get();
         }
 
+        public function countCorrectAnswer($questionId){
+            return $this->_model->where([['question_id',$questionId],['is_correct_answer',1]])
+                                ->count();
+        }
      }
 ?>
