@@ -370,14 +370,13 @@ class QuizzController extends Controller
         $question =  json_decode($this->quizRepository->getAnswerDetail($historyId),true);
         $json = array();
         $json1 = array();
-        
         foreach($answer as $value){
              $json['question_id'] = $value[0];
            try{                       
              $json['answer'] =  $this->answerRepository->getAnswer($json['question_id']);     
            }catch(\Exception $ex){              
            }             
-             $data[]=$json;
+            $data[]=$json;
         }
         foreach($question as $quest){
              foreach($data as $dt){
@@ -389,11 +388,13 @@ class QuizzController extends Controller
                     $json1['user_id'] = $quest['user_id'];
                     $coutOptionChoose = $this->answerStudentRepository->countOptionChoose($dt['question_id'],$historyId);
                     $option_choose = $this->answerStudentRepository->getOptionChoose($dt['question_id'],$historyId);
-                    for ($i=0;$i<$coutOptionChoose;$i++){
+                    for ($i=0;$i<$coutOptionChoose;$i++){                               
                         $string = "option_choose".($i+1);
                         $jsonsanswer[$string] = $option_choose[$i]['option_choose'];
                     }
-                    $json1['option_choose'] = $jsonsanswer;
+                    try{
+                        $json1['option_choose'] = $jsonsanswer;                        
+                    }catch(\Exception $E1){}
                     unset($jsonsanswer);
                     $json1['numberCorrectAnswer'] = $this->answerStudentRepository->numberCorrectAnswer($dt['question_id'],$historyId);                                     
                     $json1['totalCorrectAnswer'] = $this->answerRepository->countCorrectAnswer($dt['question_id']);
