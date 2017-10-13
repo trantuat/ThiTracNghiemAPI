@@ -33,5 +33,15 @@
                                 ->where('users.role_user_id',$role_id)
                                 ->get();
         }
+
+        public function numberTeacher(){
+            return $this->_model->where('role_user_id',2)
+                                ->count();
+        }
+
+        public function numberStudent(){
+            return $this->_model->where('role_user_id',1)
+                                ->count();
+        }
      }
 ?>

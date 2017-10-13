@@ -21,5 +21,7 @@
         public function getTotalQuestion($quizzId);
 
         public function getHistoryIdTimes($quizzId);
+
+        public function numberQuizz();
     }
 ?>

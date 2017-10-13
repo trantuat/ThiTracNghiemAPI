@@ -172,4 +172,19 @@ class QuestionController extends Controller
         return $this->OK($question);
     }
 
+    public function updateAnswer(Request $request){
+        $json = json_decode($request->getContent(),true);
+        $answer_id = $json['answer_id'];
+        $content = $json['content'];
+        $img_link = $json['img_link'];
+        $is_corerct_answer = $json['is_correct_answer'];
+        $updateAnswer = $this->answerRepository->updatewith([['id',$answer_id]],[
+                                                    'content'=>$content,
+                                                    'img_link'=>$img_link,
+                                                    'is_correct_answer'=>$is_corerct_answer,
+                                                    'updated_at'=>date("Y-m-d H:m:s")
+            ]);
+        return $this->OK('Update Answer Success');
+    }
+
 }

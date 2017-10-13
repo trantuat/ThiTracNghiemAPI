@@ -267,7 +267,14 @@ class QuizzController extends Controller
         if ($user_id == -1){
             return  $this->Unauthentication();
         }
-        return $this->historyRepository->getHistoryDetail($user_id,$quizz_id);
+        $historyDetail = $this->historyRepository->getHistoryDetail($user_id,$quizz_id);
+        foreach ($historyDetail as $history){         
+            $historyID = $history['histories_id'];
+            $score = $this->quizRepository->getQuizzScore($historyID);
+            $history['score'] = $score['data']['score'];;           
+        }
+        return $this->OK($historyDetail);
+        
     }
 
     public function getHistoryAnswer(Request $request,$history_id){

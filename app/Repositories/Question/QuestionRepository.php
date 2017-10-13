@@ -79,7 +79,31 @@
         }
         
         public function getQuestionByQuestionId($question_id){
-            return $this->_model->where('id',$question_id)
+            return $this->_model->join('topic_class','questions.topic_class_id','=','topic_class.id')
+                                ->where('questions.id',$question_id)
+                                ->get();
+        }
+
+        public function numberQuestionPublic($userID){
+            return $this->_model->where([['user_id',$userID],['is_public',1]])
+                                ->count();
+        }
+
+        public function numberQuestionNonPublic($userID){
+            return $this->_model->where([['user_id',$userID],['is_public',0]])
+                                ->count();
+        }
+
+        public function numberQuestion(){
+            return $this->_model->count();
+        }
+
+        public function top10QuestionPosted(){
+            $column = ['questions.id','questions.content','questions.img_link','questions.is_public','questions.number_answer','questions.updated_at','info.fullname'];
+            return $this->_model->join('info','questions.user_id','=','info.user_id')
+                                ->select($column)
+                                ->take(10)
+                                ->orderBy("updated_at",'desc')
                                 ->get();
         }
      }

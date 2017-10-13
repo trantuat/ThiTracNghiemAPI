@@ -22,7 +22,10 @@ Route::group(['prefix' => 'user'], function() {
     Route::put('/update', 'User\UserController@updateUser');
     Route::get('/question', 'Question\QuestionController@getAllQuestionByUserId');
     Route::get('/getQuestionPublic','User\UserController@getQuestionPublic');
-    Route::get('/getQuestionNonPublic','User\UserController@getQuestionNonPublic'); 
+    Route::get('/getQuestionNonPublic','User\UserController@getQuestionNonPublic');
+    Route::get('/numberQuestionPublic','User\UserController@numberQuestionPublic');
+    Route::get('/numberQuestionNonPublic','User\UserController@numberQuestionNonPublic');
+    Route::delete('/deleteHistory/HistoryID={id}','User\UserController@deleteHistory');    
 });
 
 Route::group(['prefix' => 'question'], function() {
@@ -35,6 +38,7 @@ Route::group(['prefix' => 'question'], function() {
     Route::get('/class={id}', 'Question\QuestionController@getQuestionByClass');
     Route::put('/update', 'Question\QuestionController@updateQuestion');
     Route::get('/question={id}','Question\QuestionController@getQuestionByQuestionId');
+    Route::put('/updateAnswer','Question\QuestionController@updateAnswer');
 });
 
 Route::group(['prefix' => 'quizz'], function() {
@@ -62,6 +66,11 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/public/{id}','Admin\AdminController@getQuestionIsPublicById');
     Route::get('/nonPublic/{id}','Admin\AdminController@getQuestionNonPublicById');
     Route::get('/userByRole/{id}','Admin\AdminController@getUserByRole');
+    Route::get('/numberTeacher','Admin\AdminController@numberTeacher');
+    Route::get('/numberStudent','Admin\AdminController@numberStudent');  
+    Route::get('/numberQuizz','Admin\AdminController@numberQuizz');
+    Route::get('/numberQuestion','Admin\AdminController@numberQuestion');
+    Route::get('/top10QuestionPosted',"Admin\AdminController@top10QuestionPosted");  
 });
 
 

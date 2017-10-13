@@ -14,5 +14,9 @@
         public function getInfoUser($userId);
 
         public function getUserByRole($role_id);
+
+        public function numberTeacher();
+
+        public function numberStudent();
     }
 ?>

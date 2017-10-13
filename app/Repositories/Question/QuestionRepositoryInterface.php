@@ -26,5 +26,13 @@
         public function getQuestionNonPublicById($userId);
 
         public function getQuestionByQuestionId($question_id);
+
+        public function numberQuestionPublic($userID);
+
+        public function numberQuestionNonPublic($userID);
+        
+        public function numberQuestion();
+
+        public function top10QuestionPosted();
     }
 ?>

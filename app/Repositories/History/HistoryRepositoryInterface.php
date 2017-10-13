@@ -14,5 +14,7 @@
         public function getHistoryDetail($userID,$quizz_id);
         
         public function getHistoryAnswer($userID,$history_id);
+
+        public function deleteHistory($historyID);
     }
 ?>

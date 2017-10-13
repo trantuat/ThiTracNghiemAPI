@@ -28,5 +28,9 @@
                                 ->count();
         }
         
+        public function deleteAnswerStudent($historyID){
+            return $this->_model->where('history_id',$historyID)
+                                ->delete();
+        }
      }
 ?>

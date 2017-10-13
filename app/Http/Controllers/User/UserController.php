@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\User\InfoRepositoryInterface;
 use App\Repositories\Question\QuestionRepositoryInterface;
+use App\Repositories\Answer\AnswerStudentRepositoryInterface;
+use App\Repositories\History\HistoryRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
 use App\Model\Token;
 use App\Http\Controllers\RoleUser;
@@ -18,12 +20,17 @@ class UserController extends Controller
     protected $userRepository;
     protected $infoRepository;
     protected $questionRepository;
+    protected $answerStudentRepository;
+    protected $historyRepository;
     
-    public function __construct(UserRepositoryInterface $userRepository, InfoRepositoryInterface $infoRepository, QuestionRepositoryInterface $questionRepository)
+    public function __construct(UserRepositoryInterface $userRepository, InfoRepositoryInterface $infoRepository, QuestionRepositoryInterface $questionRepository,AnswerStudentRepositoryInterface $answerStudentRepository,
+    HistoryRepositoryInterface $historyRepository)
     {
         $this->userRepository = $userRepository;
         $this->infoRepository = $infoRepository;
         $this->questionRepository = $questionRepository;
+        $this->answerStudentRepository = $answerStudentRepository;
+        $this->historyRepository = $historyRepository;
     }
     
 
@@ -227,5 +234,51 @@ class UserController extends Controller
         }catch(\Exception $e){
             return $this->BadRequest("Question Not Found");
         }    
+    }
+
+    public function numberQuestionPublic(Request $request){
+        try {
+            $userId = $this->getUserId($request);
+            if ($userId == -1){
+                return  $this->Unauthentication();
+            }
+            $role = $this->getRoleId($userId);
+            if ($role != RoleUser::TEACHER) {
+                 return $this->BadRequest("You're not permitted to use this api.");
+            }
+            $questionIsPublic = $this->questionRepository->numberQuestionPublic($userId);
+            return $this->OK($questionIsPublic);
+        }catch(\Exception $e){
+            return $this->BadRequest("Question Not Found");
+        }    
+    }
+
+    public function numberQuestionNonPublic(Request $request){
+        try {
+            $userId = $this->getUserId($request);
+            if ($userId == -1){
+                return  $this->Unauthentication();
+            }
+            $role = $this->getRoleId($userId);
+            if ($role != RoleUser::TEACHER) {
+                 return $this->BadRequest("You're not permitted to use this api.");
+            }
+            $questionIsPublic = $this->questionRepository->numberQuestionNonPublic($userId);
+            return $this->OK($questionIsPublic);
+        }catch(\Exception $e){
+            return $this->BadRequest("Question Not Found");
+        }    
+    }
+
+    public function deleteHistory($historyID){
+         $deleteAnswerStudent = $this->answerStudentRepository->deleteAnswerStudent($historyID);
+         if($deleteAnswerStudent == null){
+            return $this->BadRequest("No Delete");
+         }
+         $deleteHistory = $this->historyRepository->deleteHistory($historyID);
+         if($deleteHistory == null){
+            return $this->BadRequest("No Delete");
+         }
+         return $this->OK('Delete Success');
     }
 }

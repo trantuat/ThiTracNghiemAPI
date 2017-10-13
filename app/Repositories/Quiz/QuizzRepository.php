@@ -1,6 +1,7 @@
 <?php
      namespace App\Repositories\Quiz;
      use App\Repositories\BaseRepository;
+     use App\Repositories\Answer\AnswerStudentRepositoryInterface;     
 
      class QuizzRepository extends BaseRepository implements QuizzRepositoryInterface {
        
@@ -26,7 +27,8 @@
                                 //->select('answer_student.history_id','quizzes.id as quizz_id','answer_student.question_id','answer_student.option_choose')
                                 ->select('answers.is_correct_answer','answer_student.history_id','answer_student.question_id','questions.content','answer_student.option_choose','questions.img_link','questions.is_multichoise','answers.id','histories.user_id')
                                 ->where('histories.id',$quizzId)
-                                ->groupBy('answer_student.question_id')                                
+                                ->groupBy('answer_student.question_id')
+                                ->orderBy('answer_student.id')                                
                                 ->get();
         }
 
@@ -77,6 +79,7 @@
             $correct = 0;
             $count = 1;
             foreach($jsonanswer as $answer){
+                //return $this->answerStudentRepository->numberCorrectAnswer($answer['question_id'],$answer['hsitory_id']);
                 if($answer['option_choose'] == $answer['id']){
                     if($answer['is_correct_answer'] == 1){
                         foreach($questionCount as $countq){
@@ -152,5 +155,10 @@
             ->join('users','user_created_id','=','users.id')
             ->select($column)->get();
         }
+
+        public function numberQuizz(){
+            return $this->_model->count();
+        }
      }
+     
 ?>

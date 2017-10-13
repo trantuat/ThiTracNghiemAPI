@@ -32,11 +32,9 @@
         public function getHistoryDetail($userID,$quizz_id){
             $historyDetail = $this->_model->join('quizzes','histories.quizz_id','=','quizzes.id')
                                           ->where([['histories.user_id',$userID],['quizz_id',$quizz_id]])
-                                          ->select('quizzes.id','histories.id as histories_id','quizzes.quizz_name','quizzes.duration','quizzes.total','histories.quizz_times')
+                                          ->select('quizzes.id','histories.id as histories_id','quizzes.quizz_name','quizzes.duration','quizzes.total','histories.quizz_times','histories.created_at')
                                           ->get();
-            $json = array();
-            $json['data'] = $historyDetail;
-            return $json;
+            return $historyDetail;
         }
 
         public function getHistoryAnswer($userID,$history_id){
@@ -48,6 +46,11 @@
             $json = array();
             $json['data'] = $historyAnswer;
             return $json;
+        }
+
+        public function deleteHistory($historyID){
+            return $this->_model->where('id',$historyID)
+                                ->delete();
         }
      }
 ?>
