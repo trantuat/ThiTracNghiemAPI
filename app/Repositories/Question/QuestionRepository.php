@@ -80,6 +80,9 @@
         
         public function getQuestionByQuestionId($question_id){
             return $this->_model->join('topic_class','questions.topic_class_id','=','topic_class.id')
+                                ->join('topic','topic_class.topic_id','=','topic.id')
+                                ->join('classes','topic_class.class_id','=','classes.id')
+                                ->join('levels','questions.level_id','=','levels.id')
                                 ->where('questions.id',$question_id)
                                 ->get();
         }
