@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Question\QuestionRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\Answer\AnswerRepositoryInterface;
+use App\Repositories\Answer\AnswerStudentRepositoryInterface;
 use App\Model\Topic;
 use App\Model\Level;
 use App\Model\Clazz;
@@ -17,12 +18,14 @@ class QuestionController extends Controller
     protected $questionRepository;
     protected $userRepository;
     protected $answerRepository;
+    protected $answerStudentRepository;    
 
-    public function __construct(QuestionRepositoryInterface $questionRepository,UserRepositoryInterface $userRepository,AnswerRepositoryInterface $answerRepository )
+    public function __construct(QuestionRepositoryInterface $questionRepository,UserRepositoryInterface $userRepository,AnswerRepositoryInterface $answerRepository,AnswerStudentRepositoryInterface $answerStudentRepository)
     {
         $this->questionRepository = $questionRepository;
         $this->userRepository = $userRepository;
         $this->answerRepository = $answerRepository;
+        $this->answerStudentRepository = $answerStudentRepository;        
     }
 
     public function getAllQuestionByUserId(Request $request) 
@@ -169,6 +172,7 @@ class QuestionController extends Controller
 
     public function getQuestionByQuestionId($question_id){
         $question = $this->questionRepository->getQuestionByQuestionId($question_id);
+        $question[0]['answer'] = $this->answerRepository->getAnswer($question_id);
         return $this->OK($question);
     }
 
