@@ -97,9 +97,6 @@ class AdminController extends Controller
             $scorearray = $this->quizRepository->getQuizzScore($historyId);
             $score = $scorearray['data']['score'];
             $top10Score[$i]['score']=$score;
-            // if(i==3){
-            //     break;
-            // }
             $i++;
         }
         $decode = json_decode($top10Score,true);
@@ -117,14 +114,15 @@ class AdminController extends Controller
         return $this->OK($result);     
     }
 
-    public function my_sort($a, $b)
+    public function blockUser($userID)
     {
-        if ($a['score'] > $b['score']) {
-            return -1;
-        } else if ($a['score'] < $b['score']) {
-            return 1;
-        } else {
-            return 0; 
+        $get_is_active = $this->userRepository->getIsActiveUser($userID);
+        $is_active = $get_is_active[0]['is_active'];
+        if($is_active == 1){
+            $block_user = $this->userRepository->updateWith([['id',$userID]],['is_active'=>0]);
+        }else if($is_active == 0){
+            $un_block_user = $this->userRepository->updateWith([['id',$userID]],['is_active'=>1]);            
         }
+        return $this->OK('OK');
     }
 }

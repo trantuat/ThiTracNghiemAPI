@@ -43,5 +43,15 @@
             return $this->_model->where('role_user_id',1)
                                 ->count();
         }
+
+        public function getIsActiveUser($userID){
+            return $this->_model->where('id',$userID)
+                                ->select('is_active')
+                                ->get();
+        }
+
+        public function blockUser(){
+            
+        }
      }
 ?>

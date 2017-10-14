@@ -18,5 +18,7 @@
         public function numberTeacher();
 
         public function numberStudent();
+
+        public function getIsActiveUser($userID);
     }
 ?>

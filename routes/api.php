@@ -71,7 +71,8 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/numberQuizz','Admin\AdminController@numberQuizz');
     Route::get('/numberQuestion','Admin\AdminController@numberQuestion');
     Route::get('/top10QuestionPosted',"Admin\AdminController@top10QuestionPosted");
-    Route::get('/top10Score','Admin\AdminController@top10Score');  
+    Route::get('/top10Score','Admin\AdminController@top10Score');
+    Route::put('/blockUser/userId={id}','Admin\AdminController@blockUser');  
 });
 
 
