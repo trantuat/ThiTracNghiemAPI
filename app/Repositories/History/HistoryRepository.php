@@ -52,5 +52,11 @@
             return $this->_model->where('id',$historyID)
                                 ->delete();
         }
+
+        public function top10Score(){
+            return $this->_model->join('info','histories.user_id','=','info.user_id')
+                                ->select('histories.id','info.fullname','histories.quizz_times')
+                                ->get();
+        }
      }
 ?>

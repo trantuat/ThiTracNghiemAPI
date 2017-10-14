@@ -16,5 +16,7 @@
         public function getHistoryAnswer($userID,$history_id);
 
         public function deleteHistory($historyID);
+
+        public function top10Score();
     }
 ?>
