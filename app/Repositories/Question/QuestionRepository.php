@@ -46,11 +46,19 @@
         }
 
         public function getQuestionIsPublic(){
-            return $this->_model->where('is_public',1)
+            return $this->_model->join('topic_class','questions.topic_class_id','=','topic_class.id')
+                                ->join('topic','topic.id','=','topic_class.topic_id')
+                                ->join('classes','classes.id','=','topic_class.class_id')
+                                ->join('levels','levels.id','=','questions.level_id')
+                                ->where('is_public',1)
                                 ->get();
         }
         public function getQuestionNonPublic(){
-            return $this->_model->where('is_public',0)
+            return $this->_model->join('topic_class','questions.topic_class_id','=','topic_class.id')
+                                ->join('topic','topic.id','=','topic_class.topic_id')
+                                ->join('classes','classes.id','=','topic_class.class_id')
+                                ->join('levels','levels.id','=','questions.level_id')
+                                ->where('is_public',0)
                                 ->get();
         }
 
@@ -107,6 +115,12 @@
                                 ->select($column)
                                 ->take(10)
                                 ->orderBy("updated_at",'desc')
+                                ->get();
+        }
+
+        public function getIsPublicQuestion($questionID){
+            return $this->_model->where('id',$questionID)
+                                ->select('is_public')
                                 ->get();
         }
      }

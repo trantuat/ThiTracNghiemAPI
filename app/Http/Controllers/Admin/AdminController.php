@@ -120,9 +120,22 @@ class AdminController extends Controller
         $is_active = $get_is_active[0]['is_active'];
         if($is_active == 1){
             $block_user = $this->userRepository->updateWith([['id',$userID]],['is_active'=>0]);
+            return $this->OK('Block');
         }else if($is_active == 0){
-            $un_block_user = $this->userRepository->updateWith([['id',$userID]],['is_active'=>1]);            
+            $un_block_user = $this->userRepository->updateWith([['id',$userID]],['is_active'=>1]);
+            return $this->OK('Unblock');            
         }
-        return $this->OK('OK');
+    }
+
+    public function verify($questionID){
+        $get_is_public = $this->questionRepository->getIsPublicQuestion($questionID);
+        $is_public = $get_is_public[0]['is_public'];
+        if($is_public == 1){
+            $unverify = $this->questionRepository->updateWith([['id',$questionID]],['is_public'=>0]);
+            return $this->OK('Unverify'); 
+        }else if($is_public == 0){
+            $verify = $this->questionRepository->updateWith([['id',$questionID]],['is_public'=>1]);
+            return $this->OK('Verify'); 
+        }       
     }
 }

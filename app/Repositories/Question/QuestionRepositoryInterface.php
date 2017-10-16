@@ -34,5 +34,7 @@
         public function numberQuestion();
 
         public function top10QuestionPosted();
+
+        public function getIsPublicQuestion($questionID);
     }
 ?>
