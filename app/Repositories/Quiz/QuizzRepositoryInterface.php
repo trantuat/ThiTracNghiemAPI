@@ -23,5 +23,22 @@
         public function getHistoryIdTimes($quizzId);
 
         public function numberQuizz();
+
+        public function getQuizzByTopic($topic_id);
+
+        public function getQuizzByClass($class_id);
+
+        public function getQuizzByLevel($level_id);
+
+        public function getQuizzByClassAndTopic($class_id,$topic_id);
+
+        public function getQuizzByClassAndLevel($class_id,$level_id);
+
+        public function getQuizzByLevelAndTopic($level_id,$topic_id);
+
+        public function getQuizzByClassAndTopicAndLevel($class_id,$topic_id,$level_id);
+        
+        
+        
     }
 ?>

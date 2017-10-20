@@ -80,13 +80,14 @@ class UserController extends Controller
             $phone = $request->phone;
             $fullname = $request->fullname;
             $birthday = $request->birthday;
+            $gender = $request->gender;
             $userId = $this->getUserId($request);
             if ($userId == -1){
                 return  $this->Unauthentication();
             }
             $username = $request->username;
             $this->userRepository->updateWith([['id',$userId]], ['username'=>$username]);
-            $this->infoRepository->updateWith([['user_id',$userId]],['address'=>$address,'phone'=>$phone,'fullname'=>$fullname,'day_of_birth'=>$birthday]);
+            $this->infoRepository->updateWith([['user_id',$userId]],['address'=>$address,'phone'=>$phone,'gender'=>$gender,'fullname'=>$fullname,'day_of_birth'=>$birthday]);
             $user = $this->userRepository->getInfoUser($userId);
             return $this->OK($user);
         } catch (\Exception $ex) {

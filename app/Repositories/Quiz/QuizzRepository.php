@@ -159,6 +159,47 @@
         public function numberQuizz(){
             return $this->_model->count();
         }
+
+        public function getQuizzByTopic($topic_id){
+            return $this->_model->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->where('topic_class.topic_id',$topic_id)
+                                ->get();
+        }
+
+        public function getQuizzByClass($class_id){
+            return $this->_model->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->where('topic_class.class_id',$class_id)
+                                ->get();
+        }
+
+        public function getQuizzByLevel($level_id){
+            return $this->_model->where('level_id',$level_id)
+                                ->get();
+        }
+
+        public function getQuizzByClassAndTopic($class_id,$topic_id){
+            return $this->_model->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->where([['topic_class.class_id',$class_id],['topic_class.topic_id',$topic_id]])
+                                ->get();
+        }
+        
+        public function getQuizzByClassAndLevel($class_id,$level_id){
+            return $this->_model->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->where([['topic_class.class_id',$class_id],['quizzes.level_id',$level_id]])
+                                ->get();
+        }
+        
+        public function getQuizzByLevelAndTopic($level_id,$topic_id){
+            return $this->_model->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->where([['topic_class.topic_id',$topic_id],['quizzes.level_id',$level_id]])
+                                ->get();
+        }
+        
+        public function getQuizzByClassAndTopicAndLevel($class_id,$topic_id,$level_id){
+            return $this->_model->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->where([['topic_class.class_id',$class_id],['topic_class.topic_id',$topic_id],['quizzes.level_id',$level_id]])
+                                ->get();
+        }
      }
      
 ?>

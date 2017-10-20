@@ -191,4 +191,18 @@ class QuestionController extends Controller
         return $this->OK('Update Answer Success');
     }
 
+    public function deleteQuestionNonPublic(){
+        $getNonPublicQuestion = $this->questionRepository->getNonPublicQuestion();
+        foreach ($getNonPublicQuestion as $value){
+            $question_id = $value['id'];
+            $deleteAnswer = $this->answerRepository->deleteAnswerByQuestionId($question_id);
+
+        }
+        $deleteQuestionNonPunlic = $this->questionRepository->deleteQuestionNonPublic();
+        if($deleteQuestionNonPunlic == null){
+           return $this->BadRequest("No Delete");
+        }
+        return $this->OK('Delete Success');
+   }
+
 }

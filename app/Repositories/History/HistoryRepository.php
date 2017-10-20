@@ -14,9 +14,14 @@
                                 ->max('quizz_times');
         }
         
-        public function countQuizzId($quizzId){
-            return $this->_model->where('quizz_id',$quizzId)
+        public function countQuizzId($quizzId,$userId){
+            return $this->_model->where([['quizz_id',$quizzId],['user_id',$userId]])
                                 ->count('quizz_id');
+        }
+        
+        public function countUserId($quizzId){
+            return $this->_model->where('user_id',$quizzId)
+                                ->count('user_id');
         }
         
         public function getHistory($userID){
@@ -55,8 +60,27 @@
 
         public function top10Score(){
             return $this->_model->join('info','histories.user_id','=','info.user_id')
-                                ->select('histories.id','info.fullname','histories.quizz_times')
+                                ->select('histories.id','histories.user_id','info.fullname','histories.quizz_times','histories.quizz_id')
                                 ->get();
+        }
+
+        public function getDistinctUserID(){
+            return $this->_model->select('user_id')
+                                ->distinct()
+                                ->get();
+        }     
+        
+        public function getDistinctQuizzID(){
+            return $this->_model->select('quizz_id')
+                                ->distinct()
+                                ->get();
+        } 
+        
+        public function getFirstRecord($userID, $quizzID){
+            return $this->_model->join('info','histories.user_id','=','info.user_id')
+                                ->select('histories.id','histories.user_id','info.fullname','histories.quizz_times','histories.quizz_id')
+                                ->where([['histories.user_id',$userID],['histories.quizz_id',$quizzID]])
+                                ->first();
         }
      }
 ?>

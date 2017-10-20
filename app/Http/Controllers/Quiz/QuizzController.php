@@ -109,9 +109,6 @@ class QuizzController extends Controller
                                             ]);
              }
              return $this->OK(['quiz_id'=>$quiz_id]); 
-        //  } catch (\Exception $e) {
-        //     return $this->BadRequest($e);
-        // }
     }
     public function startQuizz(Request $request, $quizzId) {
         try {
@@ -133,16 +130,6 @@ class QuizzController extends Controller
             return $this->BadRequest($e);
         }
     }
-
-
-    // public function restartQuizz($quizzId) {
-    //     // try {
-    //         $quizz =  $this->quizRepository->getQuizzDetail($quizzId);
-    //         return $this->OK($quizz);
-    //     // } catch (\Exception $e) {
-    //     //     return $this->BadRequest($e);
-    //     // }
-    // }
 
     public function getAnswer(Request $request,$quizzId) {
         try {
@@ -211,7 +198,7 @@ class QuizzController extends Controller
         $quizz_id = $json['quizz_id'];
         $answer = $json['answer'];
         $maxQuizzTimes = $this->historyRepository->getMaxQuizzTimes($quizz_id);
-        $countQuizzId = $this->historyRepository->countQuizzId($quizz_id);
+        $countQuizzId = $this->historyRepository->countQuizzId($quizz_id,$user_id);
         if($countQuizzId > 0 ) $quizzTimes = $maxQuizzTimes + 1;
         else $quizzTimes=1;
         $history_id = $this->historyRepository->insertGetID([
@@ -414,8 +401,35 @@ class QuizzController extends Controller
         return $result ;
     }
 
-    public function test($question_id){
-        return $this->answerStudentRepository->getQuizzScore($question_id);
+    public function test(Request $request){
+        $user_id = $request->header('uid');
+        $quizz_id = $request->header('qid');
+        return $this->historyRepository->countQuizzId($quizz_id,$user_id);
+    }
+
+    public function getQuizzByTopic($topic_id){
+        return $this->quizRepository->getQuizzByTopic($topic_id);
+    }
+
+    public function searchQuizz(Request $request){
+        $class_id = $request->header('class_id');
+        $level_id = $request->header('level_id');
+        $topic_id = $request->header('topic_id');
+        if($class_id != null && $level_id != null && $topic_id != null){
+            return $this->quizRepository->getQuizzByClassAndTopicAndLevel($class_id,$topic_id,$level_id);
+        }else if($class_id != null && $level_id != null){
+            return $this->quizRepository->getQuizzByClassAndLevel($class_id,$level_id);
+        }else if($class_id != null && $topic_id != null){
+            return $this->quizRepository->getQuizzByClassAndTopic($class_id,$topic_id);
+        }else if($level_id != null && $topic_id != null){
+            return $this->quizRepository->getQuizzByLevelAndTopic($level_id,$topic_id);
+        }else if($class_id != null){
+            return $this->quizRepository->getQuizzByClass($class_id);
+        }else if($topic_id != null){
+            return $this->quizRepository->getQuizzByTopic($topic_id);
+        }else if($level_id != null){
+            return $this->quizRepository->getQuizzByLevel($level_id);
+        }else return $this->BadRequest('Please input value');                             
     }
     
 }

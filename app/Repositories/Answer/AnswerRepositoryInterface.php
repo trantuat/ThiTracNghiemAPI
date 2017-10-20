@@ -6,6 +6,9 @@
         * @return mixed
         */   
         public function getAnswer($questionId);
+
         public function getCorrectAnswer($questionId);
+        
+        public function deleteAnswerByQuestionId($questionID);
     }
 ?>

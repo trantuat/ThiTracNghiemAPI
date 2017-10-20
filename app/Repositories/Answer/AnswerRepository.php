@@ -24,5 +24,10 @@
             return $this->_model->where([['question_id',$questionId],['is_correct_answer',1]])
                                 ->count();
         }
+
+        public function deleteAnswerByQuestionId($questionID){
+            return $this->_model->where('question_id',$questionID)
+                                ->delete();
+        }
      }
 ?>
