@@ -205,4 +205,15 @@ class QuestionController extends Controller
         return $this->OK('Delete Success');
    }
 
+   public function topQuestionByTopic(){
+       $getTopic =  $this->questionRepository->getTopicQuestion();
+       $i = 0;
+       foreach ($getTopic as $topic){
+            $topic_id = $topic['topic_id'];
+            $getTopic[$i]['max'] = $this->questionRepository->getMaxCountQuestion($topic_id);
+            $i++;
+       }
+       return $this->OK($getTopic);
+   }
+
 }

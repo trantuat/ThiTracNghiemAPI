@@ -76,7 +76,8 @@ Route::group(['prefix' => 'admin'],function(){
     Route::put('/verify/questionId={id}','Admin\AdminController@verify');
     Route::delete('/deleteQuestionNonPublic','Question\QuestionController@deleteQuestionNonPublic');
     Route::get('/getQuizzByTopic/topicID={id}','Quiz\QuizzController@getQuizzByTopic');
-    Route::get('/searchQuizz','Quiz\QuizzController@searchQuizz');    
+    Route::get('/searchQuizz','Quiz\QuizzController@searchQuizz');
+    Route::get('/topQuestionByTopic','Question\QuestionController@topQuestionByTopic');    
 });
 
 

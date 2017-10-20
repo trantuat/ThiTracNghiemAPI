@@ -401,10 +401,11 @@ class QuizzController extends Controller
         return $result ;
     }
 
-    public function test(Request $request){
-        $user_id = $request->header('uid');
-        $quizz_id = $request->header('qid');
-        return $this->historyRepository->countQuizzId($quizz_id,$user_id);
+    public function test($request){
+        // $user_id = $request->header('uid');
+        // $quizz_id = $request->header('qid');
+        // return $this->historyRepository->countQuizzId($quizz_id,$user_id);
+        return $this->questionRepository->getMaxCountQuestion($request);
     }
 
     public function getQuizzByTopic($topic_id){

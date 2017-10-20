@@ -38,5 +38,9 @@
         public function getIsPublicQuestion($questionID);
 
         public function deleteQuestionNonPublic();
+
+        public function getMaxCountQuestion($topic_id);
+
+        public function getTopicQuestion();
     }
 ?>

@@ -139,5 +139,23 @@
                                 ->delete();
         }
 
+        public function getMaxCountQuestion($topic_id){
+            return $this->_model->join('topic_class','questions.topic_class_id','=','topic_class.id')
+                                ->join('info','questions.user_id','=','info.user_id')
+                                ->select('questions.user_id','info.fullname')
+                                ->selectRaw('count(*) as count')
+                                ->where('topic_class.topic_id',$topic_id)
+                                ->groupBy('user_id')
+                                ->orderBy('count','desc')
+                                ->first();
+        }
+
+        public function getTopicQuestion(){
+            return $this->_model->join('topic_class','questions.topic_class_id','=','topic_class.id')
+                                ->join('topic','topic_class.topic_id','=','topic.id')
+                                ->select('topic_class.topic_id','topic.topic_name')
+                                ->distinct()
+                                ->get();
+        }
      }
 ?>
