@@ -197,7 +197,7 @@ class UserController extends Controller
             if ($success) {
                return  $this->OK("Change password successfully");
             }
-            return $this->OK("Password wrong");
+            return $this->BadRequest("Password wrong");
         } catch (\Exception $ex) {
             return $this->BadRequest("Unvalid field");
         }
