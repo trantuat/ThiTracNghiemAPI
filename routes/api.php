@@ -80,7 +80,9 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/getQuizzByTopic/topicID={id}','Quiz\QuizzController@getQuizzByTopic');
     Route::get('/searchQuizz','Quiz\QuizzController@searchQuizz');
     Route::get('/topQuestionByTopic','Question\QuestionController@topQuestionByTopic');
-    Route::get('/getUserByUserID/userID={id}','User\UserController@getUserByUserID');    
+    Route::get('/getUserByUserID/userID={id}','User\UserController@getUserByUserID');
+    Route::post('/addTopic','Admin\AdminController@addTopic');
+    Route::post('/addLevel','Admin\AdminController@addLevel');        
 });
 
 

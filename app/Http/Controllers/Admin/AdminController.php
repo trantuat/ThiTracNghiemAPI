@@ -11,6 +11,8 @@ use App\Repositories\Answer\AnswerStudentRepositoryInterface;
 use App\Repositories\Quiz\QuizzRepositoryInterface;
 use App\Repositories\Quiz\QuizzQuestionRepositoryInterface;
 use App\Repositories\History\HistoryRepositoryInterface;
+use App\Model\Topic;
+use App\Model\Level;
 
 class AdminController extends Controller
 {
@@ -210,5 +212,35 @@ class AdminController extends Controller
             $verify = $this->questionRepository->updateWith([['id',$questionID]],['is_public'=>1]);
             return $this->OK('Verify'); 
         }       
+    }
+
+    public function addTopic(Request $request){
+        $json = json_decode($request->getContent(),true);
+        $topic_name = $json['topic_name'];
+        $data = ['topic_name'=>$topic_name];
+        $getAllTopic = Topic::get();
+        foreach ($getAllTopic as $Topic){
+            if(strcmp($Topic['topic_name'],$topic_name)){
+                return $this->BadRequest('Duplicate Topic');
+            }else {
+                $insertTopic = Topic::insert($data);
+                return $this->OK('Add Topic Success');
+            }
+        }
+    }
+
+    public function addLevel(Request $request){
+        $json = json_decode($request->getContent(),true);
+        $level_name = $json['level_name'];
+        $data = ['level_name'=>$level_name];
+        $getAllLevel = Level::get();
+        foreach ($getAllLevel as $Level){
+            if(strcmp($Level['level_name'],$level_name) == 0){
+                return $this->BadRequest('Duplicate Level');
+            }else {
+                $insertLevel = Level::insert($data);
+                return $this->OK('Add Level Success');
+            }
+        }
     }
 }
