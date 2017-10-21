@@ -21,9 +21,19 @@
 
         public function top10Score();
 
+        public function top10ScoreByTopicID($topic_id);
+
+        public function getFirstRecordByTopicID($userID, $quizzID, $topicID);
+
         public function getDistinctUserID();
 
+        public function getDistinctUserIDByTopicID($topic_id);
+
         public function getDistinctQuizzID();
+
+        public function getDistinctQuizzIDByTopicID($topic_id);
+
+        public function getDistinctTopicIDByTopicID();
 
         public function getFirstRecord($userID, $quizzID);
     }

@@ -29,5 +29,10 @@
             return $this->_model->where('question_id',$questionID)
                                 ->delete();
         }
+
+        public function deleteAnswerByAnswerId($answerID){
+            return $this->_model->where('id',$answerID)
+                                ->delete();
+        }
      }
 ?>

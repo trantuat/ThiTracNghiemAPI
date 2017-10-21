@@ -60,7 +60,20 @@
 
         public function top10Score(){
             return $this->_model->join('info','histories.user_id','=','info.user_id')
-                                ->select('histories.id','histories.user_id','info.fullname','histories.quizz_times','histories.quizz_id')
+                                ->join('quizzes','histories.quizz_id','=','quizzes.id')
+                                ->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->join('topic','topic_class.topic_id','=','topic.id')
+                                ->select('histories.id','histories.user_id','info.fullname','histories.quizz_times','histories.quizz_id','topic.topic_name')
+                                ->get();
+        }
+
+        public function top10ScoreByTopicID($topic_id){
+            return $this->_model->join('info','histories.user_id','=','info.user_id')
+                                ->join('quizzes','histories.quizz_id','=','quizzes.id')
+                                ->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->join('topic','topic_class.topic_id','=','topic.id')
+                                ->where('topic_class.topic_id',$topic_id)
+                                ->select('histories.id','histories.user_id','info.fullname','histories.quizz_times','histories.quizz_id','topic.topic_name')
                                 ->get();
         }
 
@@ -68,18 +81,57 @@
             return $this->_model->select('user_id')
                                 ->distinct()
                                 ->get();
-        }     
+        }
+        
+        public function getDistinctUserIDByTopicID($topic_id){
+            return $this->_model->join('quizzes','histories.quizz_id','=','quizzes.id')
+                                ->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->select('user_id')
+                                ->where('topic_class.topic_id',$topic_id)
+                                ->distinct()
+                                ->get();
+        }   
         
         public function getDistinctQuizzID(){
             return $this->_model->select('quizz_id')
                                 ->distinct()
                                 ->get();
         } 
+
+        public function getDistinctQuizzIDByTopicID($topic_id){
+            return $this->_model->join('quizzes','histories.quizz_id','=','quizzes.id')
+                                ->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->select('quizz_id')
+                                ->where('topic_class.topic_id',$topic_id)
+                                ->distinct()
+                                ->get();
+        }  
+        
+        public function getDistinctTopicIDByTopicID(){
+            return $this->_model->join('quizzes','histories.quizz_id','=','quizzes.id')
+                                ->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->select('topic_class.topic_id')
+                                ->distinct()
+                                ->get();
+        }   
         
         public function getFirstRecord($userID, $quizzID){
             return $this->_model->join('info','histories.user_id','=','info.user_id')
-                                ->select('histories.id','histories.user_id','info.fullname','histories.quizz_times','histories.quizz_id')
+                                ->join('quizzes','histories.quizz_id','=','quizzes.id')
+                                ->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->join('topic','topic_class.topic_id','=','topic.id')
+                                ->select('histories.id','histories.user_id','info.fullname','histories.quizz_times','histories.quizz_id','topic.topic_name')
                                 ->where([['histories.user_id',$userID],['histories.quizz_id',$quizzID]])
+                                ->first();
+        }
+
+        public function getFirstRecordByTopicID($userID, $quizzID, $topicID){
+            return $this->_model->join('info','histories.user_id','=','info.user_id')
+                                ->join('quizzes','histories.quizz_id','=','quizzes.id')
+                                ->join('topic_class','quizzes.topic_class_id','=','topic_class.id')
+                                ->join('topic','topic_class.topic_id','=','topic.id')
+                                ->select('histories.id','histories.user_id','info.fullname','histories.quizz_times','histories.quizz_id','topic.topic_name')
+                                ->where([['histories.user_id',$userID],['histories.quizz_id',$quizzID],['topic.id',$topicID]])
                                 ->first();
         }
      }

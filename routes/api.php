@@ -25,7 +25,8 @@ Route::group(['prefix' => 'user'], function() {
     Route::get('/getQuestionNonPublic','User\UserController@getQuestionNonPublic');
     Route::get('/numberQuestionPublic','User\UserController@numberQuestionPublic');
     Route::get('/numberQuestionNonPublic','User\UserController@numberQuestionNonPublic');
-    Route::delete('/deleteHistory/HistoryID={id}','User\UserController@deleteHistory');    
+    Route::delete('/deleteHistory/HistoryID={id}','User\UserController@deleteHistory');
+    Route::put('/updateAnswer','User\UserController@updateAnswer');    
 });
 
 Route::group(['prefix' => 'question'], function() {
@@ -38,7 +39,7 @@ Route::group(['prefix' => 'question'], function() {
     Route::get('/class={id}', 'Question\QuestionController@getQuestionByClass');
     Route::put('/update', 'Question\QuestionController@updateQuestion');
     Route::get('/question={id}','Question\QuestionController@getQuestionByQuestionId');
-    Route::put('/updateAnswer','Question\QuestionController@updateAnswer');
+    //Route::put('/updateAnswer','Question\QuestionController@updateAnswer');
 });
 
 Route::group(['prefix' => 'quizz'], function() {
@@ -72,12 +73,14 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/numberQuestion','Admin\AdminController@numberQuestion');
     Route::get('/top10QuestionPosted',"Admin\AdminController@top10QuestionPosted");
     Route::get('/top10Score','Admin\AdminController@top10Score');
+    Route::get('/top10ScoreByTopic','Admin\AdminController@top10ScoreByTopic');    
     Route::put('/blockUser/userId={id}','Admin\AdminController@blockUser');
     Route::put('/verify/questionId={id}','Admin\AdminController@verify');
     Route::delete('/deleteQuestionNonPublic','Question\QuestionController@deleteQuestionNonPublic');
     Route::get('/getQuizzByTopic/topicID={id}','Quiz\QuizzController@getQuizzByTopic');
     Route::get('/searchQuizz','Quiz\QuizzController@searchQuizz');
-    Route::get('/topQuestionByTopic','Question\QuestionController@topQuestionByTopic');    
+    Route::get('/topQuestionByTopic','Question\QuestionController@topQuestionByTopic');
+    Route::get('/getUserByUserID/userID={id}','User\UserController@getUserByUserID');    
 });
 
 

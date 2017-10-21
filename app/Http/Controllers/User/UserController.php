@@ -10,6 +10,7 @@ use App\Repositories\User\InfoRepositoryInterface;
 use App\Repositories\Question\QuestionRepositoryInterface;
 use App\Repositories\Answer\AnswerStudentRepositoryInterface;
 use App\Repositories\History\HistoryRepositoryInterface;
+use App\Repositories\Answer\AnswerRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
 use App\Model\Token;
 use App\Http\Controllers\RoleUser;
@@ -22,15 +23,17 @@ class UserController extends Controller
     protected $questionRepository;
     protected $answerStudentRepository;
     protected $historyRepository;
+    protected $answerRepository;    
     
     public function __construct(UserRepositoryInterface $userRepository, InfoRepositoryInterface $infoRepository, QuestionRepositoryInterface $questionRepository,AnswerStudentRepositoryInterface $answerStudentRepository,
-    HistoryRepositoryInterface $historyRepository)
+    HistoryRepositoryInterface $historyRepository, AnswerRepositoryInterface $answerRepository )
     {
         $this->userRepository = $userRepository;
         $this->infoRepository = $infoRepository;
         $this->questionRepository = $questionRepository;
         $this->answerStudentRepository = $answerStudentRepository;
         $this->historyRepository = $historyRepository;
+        $this->answerRepository = $answerRepository;
     }
     
 
@@ -281,5 +284,49 @@ class UserController extends Controller
             return $this->BadRequest("No Delete");
          }
          return $this->OK('Delete Success');
+    }
+
+    public function updateAnswer(Request $request){
+        $userId = $this->getUserId($request);
+        if ($userId == -1){
+            return  $this->Unauthentication();
+        }
+        $role = $this->getRoleId($userId);
+        if ($role != RoleUser::TEACHER) {
+             return $this->BadRequest("You're not permitted to use this api.");
+        }
+        $json = json_decode($request->getContent(),true);
+        $question_id = $json['question_id'];
+        $getAnswer = $this->answerRepository->getAnswer($question_id);
+        foreach ($getAnswer as $answer){
+            $arrayAnswer[] = $answer['id'];
+        }
+        $getAnswerJson = $json['answer'];
+        foreach ($getAnswerJson as $answerJson){
+            if($answerJson['id'] == 0){
+                $data = ['question_id'=>$question_id,'content'=>$answerJson['content'],'img_link'=>$answerJson['img_link'],'is_correct_answer'=>$answerJson['is_correct_answer'],'created_at'=>date("Y-m-d H:m:s")];
+                $insertAnswer = $this->answerRepository->insert($data);
+            }else{
+                $arrayIdAnswerJson[] = $answerJson['id'];
+                $updateAnswer = $this->answerRepository->updateWith([['id',$answerJson['id']]],[
+                                                        'content'=>$answerJson['content'],
+                                                        'img_link'=>$answerJson['img_link'],
+                                                        'is_correct_answer'=>$answerJson['is_correct_answer'],
+                                                        'updated_at'=>date("Y-m-d H:m:s")
+                ]);                
+            }
+        }
+        $arrayDiff =  array_diff($arrayAnswer,$arrayIdAnswerJson);
+        foreach ($arrayDiff as $array=>$value1){
+            $arrayDelete[] = $value1;
+        }
+        foreach ($arrayDelete as $idDelete){
+            $deleteAnswer = $this->answerRepository->deleteAnswerByAnswerId($idDelete);
+        }
+        return $this->OK('Update Success');
+    }
+
+    public function getUserByUserID($userID){
+         return $this->OK($this->userRepository->getInfoUser($userID));
     }
 }

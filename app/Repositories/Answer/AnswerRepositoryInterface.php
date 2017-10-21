@@ -10,5 +10,7 @@
         public function getCorrectAnswer($questionId);
         
         public function deleteAnswerByQuestionId($questionID);
+
+        public function deleteAnswerByAnswerId($answerID);
     }
 ?>

@@ -114,6 +114,50 @@ class AdminController extends Controller
                     if(($top10Score[$j]['quizz_id'] == $QuizzID['quizz_id'])
                         &&($top10Score[$j]['user_id'] == $UserID['user_id'])
                         &&($top10Score[$j]['score'] > $maxValue['score'])){
+                            $maxValue = $top10Score[$j];
+                    }
+                }$topScore[] = $maxValue;
+            }
+        }
+        usort($topScore,function($a,$b){
+            return $a['score'] > $b['score'] ? -1 : 1;
+        });
+        $k = 0;
+        foreach($topScore as $value){
+            if($k == 5){
+                break;
+            }
+            $result[] = $value;
+            $k++;
+        }
+        return $this->OK($result);     
+    }
+
+    public function topScoreByTopic($topic_id){
+        $top10Score = $this->historyRepository->top10ScoreByTopicID($topic_id);
+        $i = 0;
+        foreach ($top10Score as $top10){
+            $historyId = $top10['id'];
+            $scorearray = $this->quizRepository->getQuizzScore($historyId);
+            $score = $scorearray['data']['score'];
+            $top10Score[$i]['score']=$score;
+            $i++;
+        }
+        $topScore = array();        
+        $getDistinctUserID = $this->historyRepository->getDistinctUserIDByTopicID($topic_id);
+        $getDistinctQuizzID = $this->historyRepository->getDistinctQuizzIDByTopicID($topic_id);
+        foreach ($getDistinctUserID as $UserID){
+            foreach ($getDistinctQuizzID as $QuizzID){                
+                $getFirstRecord = $this->historyRepository->getFirstRecordByTopicID($UserID['user_id'],$QuizzID['quizz_id'],$topic_id);
+                $maxValue = $getFirstRecord;
+                $historyId1 = $getFirstRecord['id'];
+                $scorearray1 = $this->quizRepository->getQuizzScore($historyId1);
+                $score1 = $scorearray1['data']['score'];
+                $maxValue['score'] = $score1;
+                for ($j = 0; $j < sizeof($top10Score); $j++){
+                    if(($top10Score[$j]['quizz_id'] == $QuizzID['quizz_id'])
+                        &&($top10Score[$j]['user_id'] == $UserID['user_id'])
+                        &&($top10Score[$j]['score'] > $maxValue['score'])){
                              $maxValue = $top10Score[$j];
                     }
                 }$topScore[] = $maxValue;
@@ -124,13 +168,23 @@ class AdminController extends Controller
         });
         $k = 0;
         foreach($topScore as $value){
-            if($k == 9){
+            if($k == 1){
                 break;
             }
             $result[] = $value;
             $k++;
         }
-        return $this->OK($result);     
+        return $result;     
+    }
+
+    public function top10ScoreByTopic(){
+        $get_topic_id = $this->historyRepository->getDistinctTopicIDByTopicID();
+        //$topic_id = $get_topic_id[0]['topic_id'];
+        foreach ($get_topic_id as $topic){
+            $topic_id = $topic['topic_id'];
+            $result[] = $this->topScoreByTopic($topic_id);
+        }
+        return $this->OK($result);
     }
 
     public function blockUser($userID)
