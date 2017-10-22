@@ -42,5 +42,9 @@
         public function getMaxCountQuestion($topic_id);
 
         public function getTopicQuestion();
+
+        public function isPublic($questionID);
+
+
     }
 ?>

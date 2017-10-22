@@ -157,5 +157,12 @@
                                 ->distinct()
                                 ->get();
         }
+
+         public function isPublic($questionID) {
+             $q = $this->_model->where('id',$questionID)
+                                ->select('is_public')
+                                ->first();
+             return $q->is_public == 1;
+         }
      }
 ?>

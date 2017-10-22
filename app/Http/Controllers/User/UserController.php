@@ -295,13 +295,19 @@ class UserController extends Controller
         if ($role != RoleUser::TEACHER) {
              return $this->BadRequest("You're not permitted to use this api.");
         }
+
         $json = json_decode($request->getContent(),true);
         $question_id = $json['question_id'];
+        if ($this->questionRepository->isPublic($question_id)) {
+            return $this->BadRequest("Unable update this question");
+        }
         $getAnswer = $this->answerRepository->getAnswer($question_id);
         foreach ($getAnswer as $answer){
             $arrayAnswer[] = $answer['id'];
         }
+
         $getAnswerJson = $json['answer'];
+      
         foreach ($getAnswerJson as $answerJson){
             if($answerJson['id'] == 0){
                 $data = ['question_id'=>$question_id,'content'=>$answerJson['content'],'img_link'=>$answerJson['img_link'],'is_correct_answer'=>$answerJson['is_correct_answer'],'created_at'=>date("Y-m-d H:m:s")];
@@ -317,13 +323,32 @@ class UserController extends Controller
             }
         }
         $arrayDiff =  array_diff($arrayAnswer,$arrayIdAnswerJson);
+        $arrayDelete = [];
         foreach ($arrayDiff as $array=>$value1){
             $arrayDelete[] = $value1;
         }
         foreach ($arrayDelete as $idDelete){
             $deleteAnswer = $this->answerRepository->deleteAnswerByAnswerId($idDelete);
         }
-        return $this->OK('Update Success');
+
+        $correct_answer = 0;
+        foreach ($getAnswerJson as $answer) {
+            if($answer["is_correct_answer"] == 1) {
+                $correct_answer ++;
+            }
+        }
+        $is_multichoise = 0;
+        if($correct_answer > 1) {
+            $is_multichoise = 1;
+        }
+
+        $ok = $this->questionRepository->updateWith([['id',$question_id]],['number_answer'=>count($getAnswerJson),'is_multichoise'=>$is_multichoise]);
+        if ($ok) {
+             return $this->OK("Update successfully");
+        } else {
+            return $this->BadRequest("Have some error");
+        }
+       
     }
 
     public function getUserByUserID($userID){
