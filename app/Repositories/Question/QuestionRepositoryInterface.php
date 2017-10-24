@@ -45,6 +45,6 @@
 
         public function isPublic($questionID);
 
-
+        public function deleteQuestionByID($question_id);
     }
 ?>

@@ -139,6 +139,11 @@
                                 ->delete();
         }
 
+        public function deleteQuestionByID($question_id){
+            return $this->_model->where('id',$question_id)
+                                ->delete();
+        }
+
         public function getMaxCountQuestion($topic_id){
             return $this->_model->join('topic_class','questions.topic_class_id','=','topic_class.id')
                                 ->join('info','questions.user_id','=','info.user_id')

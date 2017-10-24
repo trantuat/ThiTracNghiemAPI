@@ -205,6 +205,15 @@ class QuestionController extends Controller
         return $this->OK('Delete Success');
    }
 
+   public function deleteQuestion($question_id){
+       $deleteAnswer = $this->answerRepository->deleteAnswerByQuestionId($question_id);
+       $deleteQuestion = $this->questionRepository->deleteQuestionByID($question_id);
+       if($deleteQuestion == null){
+           return $this->BadRequest("No delete");
+       }
+       return $this->OK("Delete Success");
+   }
+
    public function topQuestionByTopic(){
        $getTopic =  $this->questionRepository->getTopicQuestion();
        $i = 0;
