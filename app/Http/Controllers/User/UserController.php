@@ -345,11 +345,8 @@ class UserController extends Controller
         }
 
         $ok = $this->questionRepository->updateWith([['id',$question_id]],['number_answer'=>count($getAnswerJson),'is_multichoise'=>$is_multichoise]);
-        if ($ok) {
-             return $this->OK("Update successfully");
-        } else {
-            return $this->BadRequest("Have some error");
-        }
+        
+        return $this->OK("Update successfully");
        
     }
 
