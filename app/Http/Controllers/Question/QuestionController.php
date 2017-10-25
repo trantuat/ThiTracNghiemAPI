@@ -206,6 +206,9 @@ class QuestionController extends Controller
    }
 
    public function deleteQuestion($question_id){
+       if($this->questionRepository->isPublic($question_id)){
+           return $this->BadRequest("Can't delete question is public");
+       }
        $deleteAnswer = $this->answerRepository->deleteAnswerByQuestionId($question_id);
        $deleteQuestion = $this->questionRepository->deleteQuestionByID($question_id);
        if($deleteQuestion == null){

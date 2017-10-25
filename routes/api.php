@@ -39,7 +39,6 @@ Route::group(['prefix' => 'question'], function() {
     Route::get('/class={id}', 'Question\QuestionController@getQuestionByClass');
     Route::put('/update', 'Question\QuestionController@updateQuestion');
     Route::get('/question={id}','Question\QuestionController@getQuestionByQuestionId');
-    //Route::put('/updateAnswer','Question\QuestionController@updateAnswer');
 });
 
 Route::group(['prefix' => 'quizz'], function() {

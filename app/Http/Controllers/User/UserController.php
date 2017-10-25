@@ -301,6 +301,8 @@ class UserController extends Controller
         if ($this->questionRepository->isPublic($question_id)) {
             return $this->BadRequest("Unable update this question");
         }
+        $question_content = $json['question_content'];
+        $updateContent = $this->questionRepository->updateWith([['id',$question_id]],['content'=>$question_content]);
         $getAnswer = $this->answerRepository->getAnswer($question_id);
         foreach ($getAnswer as $answer){
             $arrayAnswer[] = $answer['id'];
