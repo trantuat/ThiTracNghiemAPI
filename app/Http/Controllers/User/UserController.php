@@ -13,6 +13,7 @@ use App\Repositories\History\HistoryRepositoryInterface;
 use App\Repositories\Answer\AnswerRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
 use App\Model\Token;
+use App\Model\TopicClass;
 use App\Http\Controllers\RoleUser;
 
 
@@ -302,7 +303,11 @@ class UserController extends Controller
             return $this->BadRequest("Unable update this question");
         }
         $question_content = $json['question_content'];
-        $updateContent = $this->questionRepository->updateWith([['id',$question_id]],['content'=>$question_content]);
+        $class_id = $json['class_id'];
+        $level_id = $json['level_id'];
+        $topic_id = $json['topic_id'];
+        $topic_class_id = TopicClass::where('topic_id',$topic_id)->where('class_id',$class_id)->first()['id'];
+        $updateQuestion = $this->questionRepository->updateWith([['id',$question_id]],['content'=>$question_content,'level_id'=>$level_id,'topic_class_id'=>$topic_class_id]);
         $getAnswer = $this->answerRepository->getAnswer($question_id);
         foreach ($getAnswer as $answer){
             $arrayAnswer[] = $answer['id'];
