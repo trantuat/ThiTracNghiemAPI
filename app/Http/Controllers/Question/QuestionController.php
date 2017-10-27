@@ -228,4 +228,13 @@ class QuestionController extends Controller
        return $this->OK($getTopic);
    }
 
+   public function getClassByTopicId($topicID){
+        try {
+            $class = Clazz::join('topic_class','topic_class.class_id','=','classes.id')->where('topic_class.topic_id',$topicID)->select('classes.id','classes.class_name')->get();        
+            return $this->OK($class);
+        } catch (\Exception $ex) {
+        return $this->BadRequest($ex);
+    }   
+}
+
 }

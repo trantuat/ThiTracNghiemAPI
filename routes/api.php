@@ -82,7 +82,8 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/getUserByUserID/userID={id}','User\UserController@getUserByUserID');
     Route::post('/addTopic','Admin\AdminController@addTopic');
     Route::post('/addLevel','Admin\AdminController@addLevel');
-    Route::delete('deleteQuestion/questionID={id}','Question\QuestionController@deleteQuestion');        
+    Route::delete('deleteQuestion/questionID={id}','Question\QuestionController@deleteQuestion');
+    Route::get('getClassByTopicId/topicID={id}','Question\QuestionController@getClassByTopicId');        
 });
 
 
