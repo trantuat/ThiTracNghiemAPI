@@ -152,6 +152,15 @@ class QuestionController extends Controller
        }
     }
 
+    public function getTopic(){
+        try {
+            $topic = Topic::all();
+            return $this->OK(json_decode($topic));
+       } catch (\Exception $ex) {
+           return $this->BadRequest($ex);
+       }
+    }
+
     public function getAllLevel() {
         try {
             $level = Level::all();

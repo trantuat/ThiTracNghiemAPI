@@ -26,7 +26,9 @@ Route::group(['prefix' => 'user'], function() {
     Route::get('/numberQuestionPublic','User\UserController@numberQuestionPublic');
     Route::get('/numberQuestionNonPublic','User\UserController@numberQuestionNonPublic');
     Route::delete('/deleteHistory/HistoryID={id}','User\UserController@deleteHistory');
-    Route::put('/updateAnswer','User\UserController@updateAnswer');    
+    Route::put('/updateAnswer','User\UserController@updateAnswer'); 
+    Route::get('getClassByTopicId/topicID={id}','Question\QuestionController@getClassByTopicId');
+    Route::get('/getAllTopic','Question\QuestionController@getTopic');
 });
 
 Route::group(['prefix' => 'question'], function() {
@@ -83,7 +85,6 @@ Route::group(['prefix' => 'admin'],function(){
     Route::post('/addTopic','Admin\AdminController@addTopic');
     Route::post('/addLevel','Admin\AdminController@addLevel');
     Route::delete('deleteQuestion/questionID={id}','Question\QuestionController@deleteQuestion');
-    Route::get('getClassByTopicId/topicID={id}','Question\QuestionController@getClassByTopicId');        
 });
 
 
