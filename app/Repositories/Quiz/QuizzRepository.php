@@ -1,7 +1,8 @@
 <?php
      namespace App\Repositories\Quiz;
      use App\Repositories\BaseRepository;
-     use App\Repositories\Answer\AnswerStudentRepositoryInterface;     
+     use App\Repositories\Answer\AnswerStudentRepositoryInterface;   
+     use App\Model\AnswerStudent;     
 
      class QuizzRepository extends BaseRepository implements QuizzRepositoryInterface {
        
@@ -64,6 +65,7 @@
         }
 
         public function getQuizzScore($historyId){
+            //return AnswerStudent::where('history_id',3)->where('question_id',1)->count();
             $answer =  $this->_model->join('histories','quizzes.id','=','histories.quizz_id')
                                     ->join('answer_student','histories.id','=','answer_student.history_id')
                                     ->join('answers','answer_student.question_id','=','answers.question_id')
@@ -79,11 +81,15 @@
             $correct = 0;
             $count = 1;
             foreach($jsonanswer as $answer){
-                //return $this->answerStudentRepository->numberCorrectAnswer($answer['question_id'],$answer['hsitory_id']);
                 if($answer['option_choose'] == $answer['id']){
                     if($answer['is_correct_answer'] == 1){
                         foreach($questionCount as $countq){
-                            if($answer['question_id'] == $countq['question_id']){
+                            $countOption = AnswerStudent::where('history_id',$answer['history_id'])->where('question_id',$answer['question_id'])->count();
+                            if($countOption -1> $countq['question_id']){
+                                $count = 0;
+                                $correct = $correct + $count;
+                            }
+                            else if($answer['question_id'] == $countq['question_id']){
                                 $count = 1/$countq['count'];
                                 $correct = $correct + $count;
                             }
@@ -200,6 +206,7 @@
                                 ->where([['topic_class.class_id',$class_id],['topic_class.topic_id',$topic_id],['quizzes.level_id',$level_id]])
                                 ->get();
         }
+
      }
      
 ?>

@@ -39,6 +39,5 @@
         public function getQuizzByClassAndTopicAndLevel($class_id,$topic_id,$level_id);
         
         
-        
     }
 ?>
