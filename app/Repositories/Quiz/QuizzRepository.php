@@ -85,7 +85,7 @@
                     if($answer['is_correct_answer'] == 1){
                         foreach($questionCount as $countq){
                             $countOption = AnswerStudent::where('history_id',$answer['history_id'])->where('question_id',$answer['question_id'])->count();
-                            if($countOption -1> $countq['question_id']){
+                            if($countOption > $countq['question_id']){
                                 $count = 0;
                                 $correct = $correct + $count;
                             }
