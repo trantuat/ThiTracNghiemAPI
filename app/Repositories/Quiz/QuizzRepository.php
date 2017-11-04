@@ -2,7 +2,8 @@
      namespace App\Repositories\Quiz;
      use App\Repositories\BaseRepository;
      use App\Repositories\Answer\AnswerStudentRepositoryInterface;   
-     use App\Model\AnswerStudent;     
+     use App\Model\AnswerStudent;
+     use App\Model\Answer;     
 
      class QuizzRepository extends BaseRepository implements QuizzRepositoryInterface {
        
@@ -66,6 +67,7 @@
 
         public function getQuizzScore($historyId){
             //return AnswerStudent::where('history_id',3)->where('question_id',1)->count();
+            //return Answer::where('question_id',1)->where('is_correct_answer',1)->count();
             $answer =  $this->_model->join('histories','quizzes.id','=','histories.quizz_id')
                                     ->join('answer_student','histories.id','=','answer_student.history_id')
                                     ->join('answers','answer_student.question_id','=','answers.question_id')
@@ -83,17 +85,20 @@
             foreach($jsonanswer as $answer){
                 if($answer['option_choose'] == $answer['id']){
                     if($answer['is_correct_answer'] == 1){
-                        foreach($questionCount as $countq){
-                            $countOption = AnswerStudent::where('history_id',$answer['history_id'])->where('question_id',$answer['question_id'])->count();
-                            if($countOption -1> $countq['question_id']){
-                                $count = 0;
-                                $correct = $correct + $count;
-                            }
-                            else if($answer['question_id'] == $countq['question_id']){
-                                $count = 1/$countq['count'];
-                                $correct = $correct + $count;
+                        $countOption = AnswerStudent::where('history_id',$answer['history_id'])->where('question_id',$answer['question_id'])->count();
+                        $countAnswer = Answer::where('question_id',$answer['question_id'])->where('is_correct_answer',1)->count();
+                        if($countOption > $countAnswer){
+                            $count = 0;
+                            $correct = $correct + $count;
+                        }else{
+                            foreach($questionCount as $countq){
+                                if($answer['question_id'] == $countq['question_id']){
+                                    $count = 1/$countq['count'];
+                                    $correct = $correct + $count;
+                                }
                             }
                         }
+                        
                         $count =1;
                     }
                 }
