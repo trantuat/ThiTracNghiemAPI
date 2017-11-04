@@ -90,12 +90,12 @@ class QuestionController extends Controller
                                             'is_multichoise'=>$is_multichoise,
                                             'number_answer'=>$number_answer,
                                             'is_public'=>0,
-                                            'created_at'=>date("Y-m-d H:m:s"),
-                                            'updated_at'=>date("Y-m-d H:m:s")
+                                            'created_at'=>date("Y-m-d H:i:s"),
+                                            'updated_at'=>date("Y-m-d H:i:s")
                                         ]);
             for ($i = 0; $i< count($answer); $i++) {
-                $data = ['question_id'=>$questionId,'content'=>$answer[$i]['content'],'is_correct_answer'=>$answer[$i]['is_correct_answer'],'img_link'=>$answer[$i]['img_link'],'created_at'=>date("Y-m-d H:m:s"),
-                'updated_at'=>date("Y-m-d H:m:s")];
+                $data = ['question_id'=>$questionId,'content'=>$answer[$i]['content'],'is_correct_answer'=>$answer[$i]['is_correct_answer'],'img_link'=>$answer[$i]['img_link'],'created_at'=>date("Y-m-d H:i:s"),
+                'updated_at'=>date("Y-m-d H:i:s")];
                 $this->answerRepository->insert($data);
             }
            
@@ -132,10 +132,10 @@ class QuestionController extends Controller
                                             'is_multichoise'=>$is_multichoise,
                                             'number_answer'=>$number_answer,
                                             'is_public'=>0,
-                                            'updated_at'=>date("Y-m-d H:m:s")
+                                            'updated_at'=>date("Y-m-d H:i:s")
                                         ]);
             for ($i = 0; $i< count($answer); $i++) {
-                $data = ['content'=>$answer[$i]['content'],'is_correct_answer'=>$answer[$i]['is_correct_answer'],'img_link'=>$answer[$i]['img_link'],'updated_at'=>date("Y-m-d H:m:s")];
+                $data = ['content'=>$answer[$i]['content'],'is_correct_answer'=>$answer[$i]['is_correct_answer'],'img_link'=>$answer[$i]['img_link'],'updated_at'=>date("Y-m-d H:i:s")];
                 $this->answerRepository->updateWith([['id',$answer[$i]['answer_id']]], $data);
             }
            
@@ -195,7 +195,7 @@ class QuestionController extends Controller
                                                     'content'=>$content,
                                                     'img_link'=>$img_link,
                                                     'is_correct_answer'=>$is_corerct_answer,
-                                                    'updated_at'=>date("Y-m-d H:m:s")
+                                                    'updated_at'=>date("Y-m-d H:i:s")
             ]);
         return $this->OK('Update Answer Success');
     }

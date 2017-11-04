@@ -99,13 +99,13 @@ class QuizzController extends Controller
                                         'topic_class_id'=>$topic_class_id,
                                         'level_id'=>$level_id,
                                         'total'=>$total,
-                                        'created_at'=>date("Y-m-d H:m:s"),
-                                        'updated_at'=>date("Y-m-d H:m:s")]);            
+                                        'created_at'=>date("Y-m-d H:i:s"),
+                                        'updated_at'=>date("Y-m-d H:i:s")]);            
              foreach ($json as $value) {
                   $this->addQuizzQuestion(['quizz_id'=>$quiz_id,
                                             'question_id'=>$value->id,
-                                            'created_at'=>date("Y-m-d H:m:s"),
-                                            'updated_at'=>date("Y-m-d H:m:s")
+                                            'created_at'=>date("Y-m-d H:i:s"),
+                                            'updated_at'=>date("Y-m-d H:i:s")
                                             ]);
              }
              return $this->OK(['quiz_id'=>$quiz_id]); 
@@ -169,7 +169,7 @@ class QuizzController extends Controller
          $this->quizQuestionRepository->updateWith(
                 [['question_id',$attribute['question_id']],['quizz_id',$attribute['quizz_id']]], 
                 ['option_choose'=>$attribute['option_choose'],
-                 'updated_at'=>date("Y-m-d H:m:s")]);
+                 'updated_at'=>date("Y-m-d H:i:s")]);
          } catch (\Exception $e) {
             throw $e;
          }
@@ -205,7 +205,7 @@ class QuizzController extends Controller
             'user_id'=>$user_id,
             'quizz_id'=>$quizz_id,
             'quizz_times'=>$quizzTimes,
-            'created_at'=>date("Y-m-d H:m:s")
+            'created_at'=>date("Y-m-d H:i:s")
         ]);
         
         for( $i=0; $i < count($answer); $i++){

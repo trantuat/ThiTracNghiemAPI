@@ -164,16 +164,16 @@ class UserController extends Controller
                                                                 'role_user_id'=>$role, 
                                                                 'email'=>$email, 
                                                                 'is_active'=>1,
-                                                                'created_at'=>date("Y-m-d H:m:s"),
-                                                                'updated_at'=>date("Y-m-d H:m:s")]);
+                                                                'created_at'=>date("Y-m-d H:i:s"),
+                                                                'updated_at'=>date("Y-m-d H:i:s")]);
                 $this->infoRepository->insert(['address'=>$address,
                                                 'phone'=>$phone,
                                                 'fullname'=>$fullname, 
                                                 'gender'=>$gender,
                                                 'day_of_birth'=>$birthday, 
                                                 'user_id'=>$userId, 
-                                                'created_at'=>date("Y-m-d H:m:s"),
-                                                'updated_at'=>date("Y-m-d H:m:s")]);
+                                                'created_at'=>date("Y-m-d H:i:s"),
+                                                'updated_at'=>date("Y-m-d H:i:s")]);
                 return $this->OK("Create account successfully");
             } catch (\Exception $ex) {
                 return $this->BadRequest("Error create account");
@@ -317,7 +317,7 @@ class UserController extends Controller
       
         foreach ($getAnswerJson as $answerJson){
             if($answerJson['id'] == 0){
-                $data = ['question_id'=>$question_id,'content'=>$answerJson['content'],'img_link'=>$answerJson['img_link'],'is_correct_answer'=>$answerJson['is_correct_answer'],'created_at'=>date("Y-m-d H:m:s")];
+                $data = ['question_id'=>$question_id,'content'=>$answerJson['content'],'img_link'=>$answerJson['img_link'],'is_correct_answer'=>$answerJson['is_correct_answer'],'created_at'=>date("Y-m-d H:i:s")];
                 $insertAnswer = $this->answerRepository->insert($data);
             }else{
                 $arrayIdAnswerJson[] = $answerJson['id'];
@@ -325,7 +325,7 @@ class UserController extends Controller
                                                         'content'=>$answerJson['content'],
                                                         'img_link'=>$answerJson['img_link'],
                                                         'is_correct_answer'=>$answerJson['is_correct_answer'],
-                                                        'updated_at'=>date("Y-m-d H:m:s")
+                                                        'updated_at'=>date("Y-m-d H:i:s")
                 ]);                
             }
         }
