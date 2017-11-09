@@ -20,5 +20,7 @@
         public function numberStudent();
 
         public function getIsActiveUser($userID);
+
+        public function checkEmail($email);
     }
 ?>

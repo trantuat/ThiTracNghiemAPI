@@ -53,5 +53,11 @@
         public function blockUser(){
             
         }
+
+        public function checkEmail($email){
+            $checkEmail = $this->_model->where('email',$email)
+                                       ->count();
+            return $checkEmail;
+        }
      }
 ?>

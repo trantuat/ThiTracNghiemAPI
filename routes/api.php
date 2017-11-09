@@ -88,6 +88,7 @@ Route::group(['prefix' => 'admin'],function(){
     Route::post('/addLevel','Admin\AdminController@addLevel');
     Route::delete('deleteQuestion/questionID={id}','Question\QuestionController@deleteQuestion');
     Route::get('/getAllQuestion','Admin\AdminController@getAllQuestion');
+    Route::post('/forgotPassword','Admin\AdminController@forgotPassword');
 });
 
 

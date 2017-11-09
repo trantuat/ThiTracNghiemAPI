@@ -14,6 +14,7 @@ use App\Repositories\History\HistoryRepositoryInterface;
 use App\Model\Topic;
 use App\Model\Level;
 use App\Model\BlockHistory;
+use Mail;
 
 class AdminController extends Controller
 {
@@ -251,5 +252,21 @@ class AdminController extends Controller
     public function getAllQuestion(){
         $allQuestion = $this->questionRepository->getAllQuestion();
         return $this->OK($allQuestion);
+    }
+
+    public function forgotPassword(Request $request){
+        $email = $request->email;
+        $checkEmail = $this->userRepository->checkEmail($email);
+        if($checkEmail == 0){
+            return $this->BadRequest('Email khong ton tai');
+        }
+        else if($checkEmail == 1){
+            $passwordReset = str_random(10);
+            $changePassword = $this->userRepository->updateWith([['email',$email]],['password'=>md5($passwordReset)]);            
+            Mail::send('mail',array('password'=>$passwordReset,'email'=>$email),function($message){
+                $message->to($email,'Website Thi Trac Nghiem')->subject('Reset Password');
+            });
+            return $this->OK('Send Email And Change Password');
+        }
     }
 }
