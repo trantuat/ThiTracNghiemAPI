@@ -264,7 +264,7 @@ class AdminController extends Controller
             $passwordReset = str_random(10);
             $changePassword = $this->userRepository->updateWith([['email',$email]],['password'=>md5($passwordReset)]);            
             Mail::send('mail',array('password'=>$passwordReset,'email'=>$email),function($message){
-                $message->to($email,'Website Thi Trac Nghiem')->subject('Reset Password');
+                $message->to($email)->subject('Reset Password');
             });
             return $this->OK('Send Email And Change Password');
         }

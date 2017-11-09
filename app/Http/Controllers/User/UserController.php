@@ -299,9 +299,6 @@ class UserController extends Controller
 
         $json = json_decode($request->getContent(),true);
         $question_id = $json['question_id'];
-        if ($this->questionRepository->isPublic($question_id)) {
-            return $this->BadRequest("Unable update this question");
-        }
         $question_content = $json['question_content'];
         $class_id = $json['class_id'];
         $level_id = $json['level_id'];
