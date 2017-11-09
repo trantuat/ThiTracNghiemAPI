@@ -13,6 +13,7 @@ use App\Repositories\Quiz\QuizzQuestionRepositoryInterface;
 use App\Repositories\History\HistoryRepositoryInterface;
 use App\Model\Topic;
 use App\Model\Level;
+use App\Model\BlockHistory;
 
 class AdminController extends Controller
 {
@@ -194,7 +195,10 @@ class AdminController extends Controller
         $get_is_active = $this->userRepository->getIsActiveUser($userID);
         $is_active = $get_is_active[0]['is_active'];
         if($is_active == 1){
+            $date = date("Y-m-d H:i:s");
             $block_user = $this->userRepository->updateWith([['id',$userID]],['is_active'=>0]);
+            $data = ['user_id'=>$userID,'block_date'=>$date,'unblock_date'=>date("Y-m-d H:i:s",strtotime($date.' + 1 day'))];
+            $addBlockHistory = BlockHistory::insert($data);
             return $this->OK('Block');
         }else if($is_active == 0){
             $un_block_user = $this->userRepository->updateWith([['id',$userID]],['is_active'=>1]);
@@ -242,5 +246,10 @@ class AdminController extends Controller
                 return $this->OK('Add Level Success');
             }
         }
+    }
+
+    public function getAllQuestion(){
+        $allQuestion = $this->questionRepository->getAllQuestion();
+        return $this->OK($allQuestion);
     }
 }

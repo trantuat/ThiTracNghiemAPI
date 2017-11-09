@@ -12,6 +12,7 @@ use App\Repositories\Quiz\QuizzRepositoryInterface;
 use App\Repositories\Quiz\QuizzQuestionRepositoryInterface;
 use App\Repositories\History\HistoryRepositoryInterface;
 use App\Model\TopicClass;
+use App\Model\QuizzTemplate;
 use App\Http\Controllers\RoleUser;
 
 class QuizzController extends Controller
@@ -195,6 +196,8 @@ class QuizzController extends Controller
         if ($role != RoleUser::STUDENT) {
              return $this->BadRequest("You're not permitted to use this api.");
         }
+        $start_time = $json['start_time'];
+        $end_time = $json['end_time'];
         $quizz_id = $json['quizz_id'];
         $answer = $json['answer'];
         $maxQuizzTimes = $this->historyRepository->getMaxQuizzTimes($quizz_id);
@@ -205,7 +208,9 @@ class QuizzController extends Controller
             'user_id'=>$user_id,
             'quizz_id'=>$quizz_id,
             'quizz_times'=>$quizzTimes,
-            'created_at'=>date("Y-m-d H:i:s")
+            'created_at'=>date("Y-m-d H:i:s"),
+            'start_time'=>$start_time,
+            'end_time'=>$end_time
         ]);
         
         for( $i=0; $i < count($answer); $i++){
@@ -431,6 +436,38 @@ class QuizzController extends Controller
         }else if($level_id != null){
             return $this->quizRepository->getQuizzByLevel($level_id);
         }else return $this->BadRequest('Please input value');                             
+    }
+
+    public function createQuizzTemplate(Request $request){
+        $user_id = $this->getUserId($request);
+        if ($user_id == -1){
+            return  $this->Unauthentication();
+        }
+         $role = $this->getRoleId($user_id);
+        if ($role == RoleUser::STUDENT) {
+             return $this->BadRequest("You're not permitted to use this api.");
+        }
+
+        $quizz_name = $request->quizz_name;
+        $duration = $request->duration;
+        $level_id = $request->level_id;
+        $class_id = $request->class_id;
+        $topic_id = $request->topic_id;
+        $total = $request->total;
+        
+        $data = ['quizz_name'=>$quizz_name,'duration'=>$duration,'level_id'=>$level_id,'class_id'=>$class_id,'topic_id'=>$topic_id,'total'=>$total];
+
+        $insertQuizzTemplate = QuizzTemplate::insert($data);
+        return $this->OK('Insert Quizz Template Success');
+    }
+
+    public function getQuizzTemplate(){
+        return $this->OK(QuizzTemplate::all());
+    }
+    
+    public function deleteQuizzTemplate($id){
+        $deleteQuizTemplate = QuizzTemplate::where('id',$id)->delete();
+        return $this->OK('Delete Success');
     }
     
 }

@@ -169,5 +169,10 @@
                                 ->first();
              return $q->is_public == 1;
          }
+
+        public function getAllQuestion(){
+            return $this->_model->orderBy('is_public')
+                                ->get();
+        }
      }
 ?>

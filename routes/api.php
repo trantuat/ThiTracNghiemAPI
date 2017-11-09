@@ -59,7 +59,9 @@ Route::group(['prefix' => 'quizz'], function() {
     Route::get('/test/{id}','Quiz\QuizzController@test');
     Route::get('/getHistoryAnswerDetail/historyId={id}','Quiz\QuizzController@getHistoryAnswerDetail'); 
     Route::get('/getResultTest/historyID={id}', 'Quiz\QuizzController@getResultTest');    
-  
+    Route::post('/createQuizzTemplate','Quiz\QuizzController@createQuizzTemplate');
+    Route::get('/getQuizzTemplate','Quiz\QuizzController@getQuizzTemplate');
+    Route::delete('/deleteQuizzTemplate/idQuizTemplate={id}','Quiz\QuizzController@deleteQuizzTemplate');
 });
 
 Route::group(['prefix' => 'admin'],function(){
@@ -85,6 +87,7 @@ Route::group(['prefix' => 'admin'],function(){
     Route::post('/addTopic','Admin\AdminController@addTopic');
     Route::post('/addLevel','Admin\AdminController@addLevel');
     Route::delete('deleteQuestion/questionID={id}','Question\QuestionController@deleteQuestion');
+    Route::get('/getAllQuestion','Admin\AdminController@getAllQuestion');
 });
 
 
