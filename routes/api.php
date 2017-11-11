@@ -62,6 +62,8 @@ Route::group(['prefix' => 'quizz'], function() {
     Route::post('/createQuizzTemplate','Quiz\QuizzController@createQuizzTemplate');
     Route::get('/getQuizzTemplate','Quiz\QuizzController@getQuizzTemplate');
     Route::delete('/deleteQuizzTemplate/idQuizTemplate={id}','Quiz\QuizzController@deleteQuizzTemplate');
+    Route::get('/getTemplateByTemplateID/id={id}','Quiz\QuizzController@getTemplateByTemplateID');
+    Route::post('/updateQuizzTemplate','Quiz\QuizzController@updateQuizzTemplate');
 });
 
 Route::group(['prefix' => 'admin'],function(){

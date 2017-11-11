@@ -25,6 +25,7 @@ class AdminController extends Controller
     protected $quizQuestionRepository;
     protected $answerStudentRepository;
     protected $historyRepository;
+    public $email = "";
     
     public function __construct(QuestionRepositoryInterface $questionRepository,
                                 UserRepositoryInterface $userRepository,
@@ -255,18 +256,18 @@ class AdminController extends Controller
     }
 
     public function forgotPassword(Request $request){
-        $email = $request->email;
-        $checkEmail = $this->userRepository->checkEmail($email);
+        $this->email = $request->email;
+        $checkEmail = $this->userRepository->checkEmail($this->email);
         if($checkEmail == 0){
             return $this->BadRequest('Email khong ton tai');
         }
-        else if($checkEmail == 1){
-            $passwordReset = str_random(10);
-            $changePassword = $this->userRepository->updateWith([['email',$email]],['password'=>md5($passwordReset)]);            
-            Mail::send('mail',array('password'=>$passwordReset,'email'=>$email),function($message){
-                $message->to($email)->subject('Reset Password');
-            });
-            return $this->OK('Send Email And Change Password');
-        }
+        $passwordReset = str_random(10);
+        $changePassword = $this->userRepository->updateWith([['email',$this->email]],['password'=>md5($passwordReset)]);            
+        Mail::send('mail',array('password'=>$passwordReset,'email'=>$this->email),function($message){
+            $message->from('nguyenquangtrieu1994@gmail.com','Thi Trac Nghiem');
+             $message->to($this->email)->subject('Reset Password');
+        });
+        return $this->OK('Send Email And Change Password');
+
     }
 }

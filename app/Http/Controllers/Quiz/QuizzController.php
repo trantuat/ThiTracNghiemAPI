@@ -462,12 +462,47 @@ class QuizzController extends Controller
     }
 
     public function getQuizzTemplate(){
-        return $this->OK(QuizzTemplate::all());
+        $getQuizzTemplate = QuizzTemplate::join('levels','quizz_template.level_id','=','levels.id')
+                            ->join('topic','quizz_template.topic_id','=','topic.id')
+                            ->join('classes','quizz_template.class_id','=','classes.id')
+                            ->get();
+        return $this->OK($getQuizzTemplate);
     }
     
     public function deleteQuizzTemplate($id){
         $deleteQuizTemplate = QuizzTemplate::where('id',$id)->delete();
         return $this->OK('Delete Success');
+    }
+
+    public function getTemplateByTemplateID($templateID){
+        $getQuizzTemplateByID = QuizzTemplate::join('levels','quizz_template.level_id','=','levels.id')
+                            ->join('topic','quizz_template.topic_id','=','topic.id')
+                            ->join('classes','quizz_template.class_id','=','classes.id')
+                            ->where('quizz_template.id',$templateID)
+                            ->get();
+        return $this->OK($getQuizzTemplateByID);
+    }
+
+    public function updateQuizzTemplate(Request $request){
+        $user_id = $this->getUserId($request);
+        if ($user_id == -1){
+            return  $this->Unauthentication();
+        }
+         $role = $this->getRoleId($user_id);
+        if ($role == RoleUser::STUDENT) {
+             return $this->BadRequest("You're not permitted to use this api.");
+        }
+
+        $id = $request->id;
+        $quizz_name = $request->quizz_name;
+        $duration = $request->duration;
+        $level_id = $request->level_id;
+        $class_id = $request->class_id;
+        $topic_id = $request->topic_id;
+        $total = $request->total;
+        $update = QuizzTemplate::where('id',$id)->update(['quizz_name'=>$quizz_name,'duration'=>$duration,'level_id'=>$level_id,'class_id'=>$class_id,'topic_id'=>$topic_id,'total'=>$total]);
+                                            
+        return $this->OK('Update Success');
     }
     
 }
