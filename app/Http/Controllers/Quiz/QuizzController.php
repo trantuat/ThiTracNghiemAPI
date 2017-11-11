@@ -465,7 +465,7 @@ class QuizzController extends Controller
         $getQuizzTemplate = QuizzTemplate::join('levels','quizz_template.level_id','=','levels.id')
                             ->join('topic','quizz_template.topic_id','=','topic.id')
                             ->join('classes','quizz_template.class_id','=','classes.id')
-                            ->select('quizz_template.id','quizz_template.quizz_name','quizz_template.duration','quizz_template.total','levels.level_name','classes.class_name','topic.topic_name')
+                            ->select('quizz_template.id','quizz_template.quizz_name','quizz_template.duration','quizz_template.total','levels.level_name','classes.class_name','topic.topic_name','quizz_template.class_id','quizz_template.level_id','quizz_template.topic_id')
                             ->get();
         return $this->OK($getQuizzTemplate);
     }
