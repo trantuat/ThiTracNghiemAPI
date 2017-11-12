@@ -91,6 +91,8 @@ Route::group(['prefix' => 'admin'],function(){
     Route::delete('deleteQuestion/questionID={id}','Question\QuestionController@deleteQuestion');
     Route::get('/getAllQuestion','Admin\AdminController@getAllQuestion');
     Route::post('/forgotPassword','Admin\AdminController@forgotPassword');
+    Route::get('/getBlockHistory','Admin\AdminController@getBlockHistory');
+    Route::get('/getBlockHistoryByUserID/userID={id}','Admin\AdminController@getBlockHistoryByUserID');
 });
 
 

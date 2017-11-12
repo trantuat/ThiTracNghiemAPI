@@ -270,4 +270,12 @@ class AdminController extends Controller
         return $this->OK('Send Email And Change Password');
 
     }
+
+    public function getBlockHistory(){
+        return $this->OK(BlockHistory::all());
+    }
+
+    public function getBlockHistoryByUserID($userID){
+        return $this->OK(BlockHistory::where('user_id',$userID)->get());
+    }
 }

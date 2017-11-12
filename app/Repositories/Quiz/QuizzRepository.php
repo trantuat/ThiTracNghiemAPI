@@ -71,7 +71,7 @@
             $answer =  $this->_model->join('histories','quizzes.id','=','histories.quizz_id')
                                     ->join('answer_student','histories.id','=','answer_student.history_id')
                                     ->join('answers','answer_student.question_id','=','answers.question_id')
-                                    ->select('answer_student.history_id','quizzes.id as quizz_id','answer_student.question_id','answer_student.option_choose','answers.id','answers.is_correct_answer')
+                                    ->select('answer_student.history_id','quizzes.id as quizz_id','answer_student.question_id','answer_student.option_choose','answers.id','answers.is_correct_answer','histories.start_time','histories.end_time')
                                     ->where('histories.id',$historyId)
                                     ->get();
             $jsonanswer = json_decode($answer,true);
@@ -107,6 +107,8 @@
             $json['correct_answer'] = $correct;
             $json['wrong_answer'] = $totalQuestion - $correct;
             $json['score'] =($correct/$totalQuestion)*10;
+            $json['start_time'] = $jsonanswer[0]['start_time'];
+            $json['end_time'] = $jsonanswer[0]['end_time'];
             $json1 = array();
             $json1['data'] =$json;
             return $json1;

@@ -37,7 +37,7 @@
         public function getHistoryDetail($userID,$quizz_id){
             $historyDetail = $this->_model->join('quizzes','histories.quizz_id','=','quizzes.id')
                                           ->where([['histories.user_id',$userID],['quizz_id',$quizz_id]])
-                                          ->select('quizzes.id','histories.id as histories_id','quizzes.quizz_name','quizzes.duration','quizzes.total','histories.quizz_times','histories.created_at')
+                                          ->select('quizzes.id','histories.id as histories_id','quizzes.quizz_name','quizzes.duration','quizzes.total','histories.quizz_times','histories.created_at','histories.start_time','histories.end_time')
                                           ->get();
             return $historyDetail;
         }
