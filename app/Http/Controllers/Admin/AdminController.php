@@ -199,11 +199,14 @@ class AdminController extends Controller
         if($is_active == 1){
             $date = date("Y-m-d H:i:s");
             $block_user = $this->userRepository->updateWith([['id',$userID]],['is_active'=>0]);
-            $data = ['user_id'=>$userID,'block_date'=>$date,'unblock_date'=>date("Y-m-d H:i:s",strtotime($date.' + 1 day'))];
+            $data = ['user_id'=>$userID,'block_date'=>$date];
             $addBlockHistory = BlockHistory::insert($data);
             return $this->OK('Block');
         }else if($is_active == 0){
+			$date = date("Y-m-d H:i:s");
             $un_block_user = $this->userRepository->updateWith([['id',$userID]],['is_active'=>1]);
+			$data = ['user_id'=>$userID,'unblock_date'=>$date];
+            $addBlockHistory = BlockHistory::where('user_id',$userID)->orderBy('id','desc')->take(1)->update(['unblock_date'=>$date]);
             return $this->OK('Unblock');            
         }
     }

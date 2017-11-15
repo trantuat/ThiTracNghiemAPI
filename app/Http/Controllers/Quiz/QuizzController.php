@@ -310,7 +310,8 @@ class QuizzController extends Controller
         $question =  json_decode($this->quizRepository->getAnswerDetail($historyId),true);
         $json = array();
         $json1 = array();
-        
+        $json['start_time'] = $question[0]['start_time'];
+		$json['end_time'] = $question[0]['end_time'];
         foreach($answer as $value){
              $json['question_id'] = $value[0];
            try{                       

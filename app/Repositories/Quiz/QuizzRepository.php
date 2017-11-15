@@ -27,7 +27,7 @@
                                 ->join('questions','answer_student.question_id','=','questions.id')
                                 ->join('answers','answer_student.question_id','=','answers.question_id')
                                 //->select('answer_student.history_id','quizzes.id as quizz_id','answer_student.question_id','answer_student.option_choose')
-                                ->select('answers.is_correct_answer','answer_student.history_id','answer_student.question_id','questions.content','answer_student.option_choose','questions.img_link','questions.is_multichoise','answers.id','histories.user_id')
+                                ->select('answers.is_correct_answer','answer_student.history_id','answer_student.question_id','questions.content','answer_student.option_choose','questions.img_link','questions.is_multichoise','answers.id','histories.user_id','histories.start_time','histories.end_time')
                                 ->where('histories.id',$quizzId)
                                 ->groupBy('answer_student.question_id')
                                 ->orderBy('answer_student.id')                                
