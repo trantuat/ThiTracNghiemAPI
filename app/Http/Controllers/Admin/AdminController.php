@@ -112,7 +112,10 @@ class AdminController extends Controller
                 $getFirstRecord = $this->historyRepository->getFirstRecord($UserID['user_id'],$QuizzID['quizz_id']);
                 $maxValue = $getFirstRecord;
                 $historyId1 = $getFirstRecord['id'];
-                $scorearray1 = $this->quizRepository->getQuizzScore($historyId1);
+                try{
+					$scorearray1 = $this->quizRepository->getQuizzScore($historyId1);
+				}catch(\Exception $ex){              
+           }             
                 $score1 = $scorearray1['data']['score'];
                 $maxValue['score'] = $score1;
                 for ($j = 0; $j < sizeof($top10Score); $j++){
