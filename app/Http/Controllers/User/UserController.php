@@ -293,7 +293,7 @@ class UserController extends Controller
             return  $this->Unauthentication();
         }
         $role = $this->getRoleId($userId);
-        if ($role != RoleUser::TEACHER) {
+        if ($role == RoleUser::STUDENT) {
              return $this->BadRequest("You're not permitted to use this api.");
         }
 
